@@ -1,25 +1,56 @@
-from db import *
+from todos_los_modulos import *
 
 db = Ecommerce(conf)
 
-LOGIN Y REGISTRO:
-email = input("Ingrese email: ")
-clave = input("Ingrese clave: ")
-
-usuario_login = db.login_usuario(email, clave)
-if usuario_login:
-    if usuario_login[0] == clave:
-        datos = db.traer_usuario(usuario_login[1])
-        usuario = Usuario(*datos)
+def registro_usuario(email):
+    if db.datos_login(email, None):
+        print("Ya tiene un usuario. ¿Olvidó su contraseña?")
+        pass
     else:
-        print("Contraseña incorrecta")
-else:
-    print("Ese email no se encuentra registrado. Quiere crear una cuenta?")
-    crear = input("(s/n): ")
-    if crear == 's':
-        usuario = crear_usuario_nuevo(email)
-try:
-    print(usuario)
-    print(usuario.get_dni(), usuario.get_nombre(), usuario.get_apellido(), usuario.get_email(), usuario.get_clave(), usuario.get_telefono())
-except:
-    pass
+        usuario = None
+        print("Se va a crear un usuario con el email:", email)
+        while not usuario:
+            try:
+                nombre = input("Nombre: ")
+                apellido = input("Apellido: ")
+                dni = int(input("Dni: "))
+                clave = getpass("Clave: ")
+                telefono = int(input("Telefono: "))
+                usuario = Usuario(0, dni, nombre, apellido, email, clave, telefono, 0)
+            except:
+                print("Ocurrio un error. Pruebe nuevamente")
+        print("Usuario creado")
+        db.registrar_usuario(usuario)
+
+def inicio_sesion():
+    email = input("Email: ")
+    clave = encriptar(getpass("Clave: ")).decode()
+
+    datos_login = db.datos_login(email, clave)
+    if datos_login:
+        if clave == datos_login[0]:
+            usuario_datos = db.datos_de_usuario_id(datos_login[1])
+            usuario_actual = Usuario(*usuario_datos)
+        else:
+            print("Contraseña incorrecta")
+    else:
+        print("Ese mail no se encuentra en nuestra base de datos.")
+        rta = input("Quiere crear un usuario? (s/n) ")
+        if rta == 's':
+            registro_usuario(email)
+
+def menu_sesion():
+    rta = ''
+    while not (rta == '1' or rta == '2'):
+        print("[1] Iniciar sesion [2] Registrarse")
+        rta = input("(1/2): ")
+        if rta == '1':
+            inicio_sesion()
+        elif rta == '2':
+            email = input('Ingrese su email: ') # check_mail
+            if email:
+                registro_usuario(email)
+            else:
+                rta = ''
+
+menu_sesion()

@@ -1,7 +1,11 @@
 import base64
 
+def encriptar(clave):
+    return base64.encodebytes(clave.encode())
+
 class Usuario:
-    def __init__(self, dni, nombre, apellido, email, clave, telefono, direccion_id = 0, ID = 0):
+    def __init__(self, usuario_id, dni, nombre, apellido, email, clave, telefono, direccion_id):
+        self.set_usuario_id(usuario_id)
         self.set_dni(dni)
         self.set_nombre(nombre)
         self.set_apellido(apellido)
@@ -9,7 +13,6 @@ class Usuario:
         self.set_clave(clave)
         self.set_telefono(telefono)
         self.set_direccion_id(direccion_id)
-        self.set_usuario_id(ID)
 
     def get_dni(self):
         return self.dni
@@ -24,7 +27,7 @@ class Usuario:
         return self.email
 
     def get_clave(self):
-        return base64.encodebytes(self.clave.encode())
+        return encriptar(clave)
 
     def get_telefono(self):
         return self.telefono
@@ -36,10 +39,6 @@ class Usuario:
         return self.id
 
     def set_dni(self, dni):
-        try:
-            dni = int(dni)
-        except:
-            dni = None
         self.dni = dni
 
     def set_nombre(self, nombre):
@@ -55,22 +54,10 @@ class Usuario:
         self.clave = clave
 
     def set_telefono(self, telefono):
-        try:
-            telefono = int(telefono)
-        except:
-            telefono = None
         self.telefono = telefono
 
     def set_direccion_id(self, direccion_id):
-        self.direccion_id = int(direccion_id)
+        self.direccion_id = direccion_id
 
     def set_usuario_id(self, ID):
-        self.id = int(ID)
-
-def crear_usuario_nuevo(email):
-    nombre = input("Nombre: ")
-    apellido = input("Apellido: ")
-    dni = int(input("DNI: "))
-    clave = input("Clave: ")
-    telefono = int(input("Telefono: "))
-    return Usuario(dni, nombre, apellido, email, clave, telefono)
+        self.id = ID

@@ -1,12 +1,11 @@
 from todos_los_modulos import *
 
 #encriptar claves
-# ~ db = Ecommerce(conf)
+db = Ecommerce(conf)
 
-# ~ usuarios = db.listar_usuarios()
+lista_usuarios = db.todos_los_usuarios()
 
-# ~ for datos in usuarios:
-    # ~ print(datos)
-    # ~ dni, nombre, apellido, email, clave, telefono, direccion_id, usuario_id = datos
-    # ~ usuario = Usuario(dni, nombre, apellido, email, clave, telefono, 0, usuario_id)
-    # ~ db.actualizar_clave(usuario)
+for datos in lista_usuarios:
+    usuario = Usuario(*datos)
+    print(datos)
+    # ~ db.actualizar_usuario_direccion_id(usuario)
