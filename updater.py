@@ -1,7 +1,7 @@
 from todos_los_modulos import *
 
 #encriptar claves
-db = Ecommerce(conf)
+db = Ecommerce_db(conf)
 
 lista_usuarios = db.todos_los_usuarios()
 

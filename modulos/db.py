@@ -1,7 +1,7 @@
 import mysql.connector
 from modulos.dbconf import *
 
-class Ecommerce:
+class Ecommerce_db:
     def __init__(self, conf):
         self.conexion = mysql.connector.connect(**conf)
         self.cursor = self.conexion.cursor()

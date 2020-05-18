@@ -1,6 +1,7 @@
 from todos_los_modulos import *
 
-db = Ecommerce(conf)
+
+db = Ecommerce_db(conf)
 
 def registro_usuario(email):
     if db.datos_login(email, None):

@@ -1,23 +1,31 @@
-[] Base de datos:
-[x] Encriptar claves
-[ ] Agregar carrito de compras
-[ ] Volver a hacer ecommerce_final.sql
+Base de datos:
+.[ ] Agregar carrito de compras
+.[ ] Agregar fecha_de_compra DATETIME en compra
+.[ ] Agregar fecha_de_nacimiento DATE en usuario
 
-[ ] ABM:
-* usuarios
-* direcciones
-* productos
-* categorias
-* marcas
-* compras
-* carrito de compras
+Modulos:
+.[ ] usuarios
+.[ ] direcciones
+.[ ] productos
+.[ ] categorias
+.[ ] marcas
+.[ ] compras
+.[ ] carrito de compras ?
+.[x] Login
+.[x] Registro usuario
+.[ ] Modificar datos usuario
+.[ ] AGREGAR REGISTRO DIRECCIONES! < IMPORTANTE
+.[ ] Añadir producto
+.[ ] Modificar datos producto
+.[ ] Añadir a carrito
+.[ ] Modificar carrito
+.[ ] Registro compra
 
-[x] Login
-[x] Registro
-[ ] email_validation
-[x] getpass
+Agregar:
+.[ ] email_validation
+.[x] getpass
 
 Hay q estructurar el programa:
-[x] Guardar modulos en una carpeta común
-[ ] Modularizar funciones del programa principal (todos_los_modulos.py)
-[ ] Programa principal en carpeta principal (main.py)
+.[x] Guardar modulos en una carpeta común
+.[ ] Modularizar funciones del programa principal (todos_los_modulos.py)
+.[ ] Programa principal en carpeta principal (main.py)
