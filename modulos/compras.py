@@ -1,10 +1,15 @@
 class Compra:
-    def __init__(self, usuario_id, direccion_id, producto_id, cantidad, precio_total, ID = 0):
+    def __init__(self, compra_id, usuario_id, direccion_id, producto_id, cantidad, precio_total, fecha_de_compra):
+        self.set_compra_id(compra_id)
         self.set_usuario_id(usuario_id)
         self.set_direccion_id(direccion_id)
         self.set_producto_id(producto_id)
         self.set_cantidad(cantidad)
         self.set_precio_total(precio_total)
+        self.set_fecha_de_compra(fecha_de_compra)
+
+    def get_compra_id(compra_id):
+        return self.compra_id
 
     def get_usuario_id(self):
         return self.usuario_id
@@ -19,7 +24,13 @@ class Compra:
         return self.cantidad
 
     def get_precio_total(self):
-        return precio_total
+        return self.precio_total
+
+    def get_fecha_de_compra(self):
+        return self.fecha_de_compra
+
+    def set_compra_id(self, compra_id):
+        self.compra_id = compra_id
 
     def set_usuario_id(self, usuario_id):
         self.usuario_id = usuario_id
@@ -34,7 +45,7 @@ class Compra:
         self.cantidad = cantidad
 
     def set_precio_total(self, precio_total):
-        self.precio_total
+        self.precio_total = precio_total
 
-    def set_compra_id(self, ID):
-        self.id = ID
+    def set_fecha_de_compra(self, fecha_de_compra):
+        self.fecha_de_compra = fecha_de_compra

@@ -1,14 +1,16 @@
 **Base de datos:**
 - [ ] Agregar carrito de compras
-- [ ] Agregar fecha_de_compra DATETIME en compra
-- [ ] Agregar fecha_de_nacimiento DATE en usuario
+- [x] Agregar fecha_de_compra DATETIME en compra
+- [x] Agregar fecha_de_publicacion DATETIME en producto
+- [x] Agregar fecha_de_nacimiento DATE en usuario
+- [x] Agregar fecha_de_registro DATETIME en usuario
 
 **Modulos:**
-- [ ] usuarios
-- [ ] direcciones
-- [ ] productos
-- [ ] categorias
-- [ ] compras
+- [x] usuarios
+- [x] direcciones
+- [x] productos
+- [x] categorias
+- [x] compras
 - [ ] carrito de compras ?
 - [x] Login
 - [x] Registro usuario
@@ -21,7 +23,7 @@
 - [ ] Registro compra
 
 **Agregar:**
-- [ ] email_validation
+- [x] validate_email
 - [x] getpass
 
 **Hay q estructurar el programa:**
