@@ -1,6 +1,4 @@
 from todos_los_modulos import *
-from datetime import *
-from validate_email import validate_email
 
 db = Ecommerce_db(conf)
 
