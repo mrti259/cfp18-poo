@@ -15,7 +15,7 @@ def registro_usuario(email):
                 nombre = input("Nombre: ")
                 apellido = input("Apellido: ")
                 dni = int(input("Dni: "))
-                clave = getpass("Clave: ")
+                clave = input("Clave: ")
                 telefono = int(input("Telefono: "))
                 usuario = Usuario(0, dni, nombre, apellido, email, clave, telefono, 0)
             except:

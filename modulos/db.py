@@ -1,6 +1,7 @@
 import mysql.connector
 from modulos.dbconf import *
 
+
 class Ecommerce_db:
     def __init__(self, conf):
         self.conexion = mysql.connector.connect(**conf)
@@ -32,7 +33,7 @@ class Ecommerce_db:
         return self.cursor.fetchone()
 
     def registrar_usuario(self, usuario):
-        val = (usuario.get_nombre(), usuario.get_apellido(), usuario.get_email(), usuario.get_clave(), usuario.get_telefono(), usuario.get_direccion_id())
+        val = (usuario.get_dni(),usuario.get_nombre(), usuario.get_apellido(),usuario.get_clave(), usuario.get_email(), usuario.get_telefono())
         self.cursor.execute(queries["insert_usuario"], val)
         self.conexion.commit()
         usuario.set_usuario_id(self.cursor.lastrowid)

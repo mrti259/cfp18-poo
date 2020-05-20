@@ -19,7 +19,7 @@ queries = {
     "update_usuario_telefono":"UPDATE usuario SET telefono = %s WHERE usuario_id = %s",
     "update_usuario_direccion":"UPDATE usuario SET direccion_id = %s WHERE usuario_id = %s",
     "insert_producto":"INSERT INTO producto(nombre, descripcion, precio, categoria_id, marca_id) VALUES (%s, %s, %s, %s, %s)",
-    "insert_usuario":"INSERT INTO usuario(dni, nombre, apellido, clave, email, telefono) VALUES (%s, %s, %s, %s)",
+    "insert_usuario":"INSERT INTO usuario(dni, nombre, apellido, clave, email, telefono) VALUES (%s, %s, %s, %s, %s, %s)",
     "insert_compra":"INSERT INTO compra(usuario_id, direccion_id, producto_id, cantidad, precio_total) VALUES (%s, %s, %s, %s, %s)",
     "delete_producto":"DELETE FROM producto WHERE producto_id = %s",
     "delete_usuario":"DELETE FROM usuario WHERE usuario_id = %s",

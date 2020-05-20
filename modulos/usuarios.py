@@ -27,7 +27,7 @@ class Usuario:
         return self.email
 
     def get_clave(self):
-        return encriptar(clave)
+        return encriptar(self.clave)
 
     def get_telefono(self):
         return self.telefono
