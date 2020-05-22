@@ -1,6 +1,6 @@
 conf = {
     "host": "localhost",
-    "user": "martina",
+    "user": "root",
     "passwd": "",
     "database": "ecommerce_final"
 }
