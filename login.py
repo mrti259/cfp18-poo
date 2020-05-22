@@ -1,9 +1,9 @@
 from todos_los_modulos import *
 
-db = Ecommerce_db(conf)
+db = Ecommerce_db(dbconf)
 
 def registro_usuario(email):
-    if db.datos_login(email, None):
+    if db.datos_login(email):
         print("Ya tiene un usuario. ¿Olvidó su contraseña?")
         pass
     else:
@@ -34,11 +34,11 @@ def inicio_sesion():
         print("No es un mail válido. Pruebe nuevamente:")
         email = input("Email: ")
     clave = encriptar(getpass("Clave: ")).decode()
-    datos_login = db.datos_login(email, clave)
-    if datos_login:
-        if clave == datos_login[0]:
-            usuario_datos = db.datos_de_usuario_id(datos_login[1])
-            usuario_actual = Usuario(*usuario_datos)
+    login_usuario = db.datos_login(email)
+    if login_usuario:
+        if clave == login_usuario[0]:
+            datos_usuario = db.datos_de_usuario_id(login_usuario[1])
+            usuario_actual = Usuario(*datos_usuario)
             print("Usuario cargado.")
         else:
             print("Contraseña incorrecta")

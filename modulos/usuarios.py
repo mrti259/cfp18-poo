@@ -15,6 +15,7 @@ class Usuario:
         self.set_telefono(telefono)
         self.set_direccion_id(direccion_id)
         self.set_fecha_de_registro(fecha_de_registro)
+        self.carrito = []
 
     def get_usuario_id(self):
         return self.usuario_id
@@ -46,6 +47,9 @@ class Usuario:
     def get_fecha_de_registro(self):
         return self.fecha_de_registro
 
+    def get_carrito(self):
+        return self.carrito
+
     def set_usuario_id(self, usuario_id):
         self.usuario_id = usuario_id
 
@@ -75,3 +79,6 @@ class Usuario:
 
     def set_fecha_de_registro(self, fecha_de_registro):
         self.fecha_de_registro = fecha_de_registro
+
+    def cargar_carrito(self, carrito):
+        self.carrito.concat(carrito)

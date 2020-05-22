@@ -115,3 +115,14 @@ CREATE TABLE `compra` (
   FOREIGN KEY (`direccion_id`) REFERENCES `direccion` (`direccion_id`),
   FOREIGN KEY (`producto_id`) REFERENCES `producto` (`producto_id`)
 );
+
+DROP TABLE IF EXISTS `carrito`;
+CREATE TABLE `carrito` (
+  `carrito_id` INTEGER NOT NULL AUTO_INCREMENT,
+  `usuario_id` INTEGER NOT NULL,
+  `producto_id` INTEGER NOT NULL,
+  `cantidad` INTEGER NOT NULL,
+  PRIMARY KEY (`carrito_id`),
+  FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`),
+  FOREIGN KEY (`producto_id`) REFERENCES `producto` (`producto_id`)
+);

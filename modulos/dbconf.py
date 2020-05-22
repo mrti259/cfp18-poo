@@ -1,6 +1,6 @@
-conf = {
+dbconf = {
     "host": "localhost",
-    "user": "root",
+    "user": "martina",
     "passwd": "",
     "database": "ecommerce_final"
 }

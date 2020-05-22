@@ -1,5 +1,5 @@
 **Base de datos:**
-- [ ] Agregar carrito de compras
+- [x] Agregar carrito de compras
 - [x] Agregar fecha_de_compra DATETIME en compra
 - [x] Agregar fecha_de_publicacion DATETIME en producto
 - [x] Agregar fecha_de_nacimiento DATE en usuario
@@ -11,7 +11,7 @@
 - [x] productos
 - [x] categorias
 - [x] compras
-- [ ] carrito de compras ?
+- [x] carrito de compras ?
 - [x] Login
 - [x] Registro usuario
 - [ ] Modificar datos usuario

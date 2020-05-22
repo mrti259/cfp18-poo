@@ -7,6 +7,8 @@ queries = {
     "select_compras":"SELECT * FROM compra",
     "select_datos_login":"SELECT clave, usuario_id FROM usuario WHERE email = %s",
     "select_datos_usuario":"SELECT * FROM usuario WHERE usuario_id = %s",
+    "select_categoria_id":"SELECT categoria_id FROM categoria WHERE nombre = %s",
+    "select_marca_id":"SELECT marca_id FROM marca WHERE nombre = %s",
     "update_producto_nombre":"UPDATE producto SET nombre = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_descripcion":"UPDATE producto SET descripcion = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_precio":"UPDATE producto SET precio = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
@@ -22,8 +24,8 @@ queries = {
 }
 
 class Ecommerce_db:
-    def __init__(self, conf):
-        self.conexion = mysql.connector.connect(**conf)
+    def __init__(self, dbconf):
+        self.conexion = mysql.connector.connect(**dbconf)
         self.cursor = self.conexion.cursor()
 
     def todos_los_usuarios(self):
@@ -46,10 +48,26 @@ class Ecommerce_db:
         self.cursor.execute(queries["select_datos_usuario"], val)
         return self.cursor.fetchone()
 
-    def datos_login(self, email, clave):
+    def datos_login(self, email):
         val = (email,)
         self.cursor.execute(queries["select_datos_login"], val)
         return self.cursor.fetchone()
+
+    def id_de_categoria(self, categoria_nombre):
+        val = (categoria_nombre,)
+        self.cursor.execute(queries["select_categoria_id"], val)
+        categoria_id = self.cursor.fetchone()
+        if not categoria_id:
+            categoria_id = 0
+        return categoria_id
+
+    def id_de_marca(self, marca_nombre):
+        val = (marca_nombre,)
+        self.cursor.execute(queries["select_marca_id"], val)
+        marca_id = self.cursor.fetchone()
+        if not marca_id:
+            marca_id = 0
+        return marca_id
 
     def registrar_usuario(self, usuario):
         val = (usuario.get_dni(), usuario.get_nombre(), usuario.get_apellido(), usuario.get_fecha_de_nacimiento(), usuario.get_email(), usuario.get_clave(), usuario.get_telefono(), usuario.get_fecha_de_registro())
