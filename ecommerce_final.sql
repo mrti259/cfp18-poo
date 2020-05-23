@@ -9,7 +9,7 @@ CREATE TABLE `pais` (
   PRIMARY KEY (`pais_id`)
 );
 
-INSERT INTO `pais` VALUES (1,'Argentina'),(2,'Uruguay'),(3,'Chile'),(4,'Paraguay'),(5,'Bolivia');
+INSERT INTO `pais` VALUES (0,'Otro'),(1,'Argentina'),(2,'Uruguay'),(3,'Chile'),(4,'Paraguay'),(5,'Bolivia');
 
 
 DROP TABLE IF EXISTS `provincia`;
@@ -21,7 +21,7 @@ CREATE TABLE `provincia` (
   FOREIGN KEY (`pais_id`) REFERENCES `pais` (`pais_id`)
 );
 
-INSERT INTO `provincia` VALUES (1,'Ciudad Autónoma de Buenos Aires',1),(2,'Gran Buenos Aires',1),(3,'Buenos Aires',1),(4,'Santa Fe',1),(5,'Córdoba',1);
+INSERT INTO `provincia` VALUES (0,'Otro'),(1,'Ciudad Autónoma de Buenos Aires',1),(2,'Gran Buenos Aires',1),(3,'Buenos Aires',1),(4,'Santa Fe',1),(5,'Córdoba',1);
 
 
 DROP TABLE IF EXISTS `ciudad`;
@@ -33,7 +33,7 @@ CREATE TABLE `ciudad` (
   FOREIGN KEY (`provincia_id`) REFERENCES `provincia` (`provincia_id`)
 ) ;
 
-INSERT INTO `ciudad` VALUES (1,'Ciudad Autonoma de Buenos Aires',1),(2,'Mar del Plata',3),(3,'Bahia Blanca',3),(4,'Necochea',3),(5,'San Isidro',2),(6,'Vicente Lopez',2),(7,'San Fernando',2);
+INSERT INTO `ciudad` VALUES (0,'Otro')(1,'Ciudad Autonoma de Buenos Aires',1),(2,'Mar del Plata',3),(3,'Bahia Blanca',3),(4,'Necochea',3),(5,'San Isidro',2),(6,'Vicente Lopez',2),(7,'San Fernando',2);
 
 
 DROP TABLE IF EXISTS `direccion`;
@@ -55,7 +55,7 @@ CREATE TABLE `marca` (
   PRIMARY KEY (`marca_id`)
 );
 
-INSERT INTO `marca` VALUES (1,'Adidas'),(2,'Nike'),(3,'Reebok'),(4,'Topper'),(5,'Puma'),(6,'Converse'),(7,'Crocs'),(8,'DC'),(9,'Vans'),(10,'Le coq sportif');
+INSERT INTO `marca` VALUES (0,'Otro'),(1,'Adidas'),(2,'Nike'),(3,'Reebok'),(4,'Topper'),(5,'Puma'),(6,'Converse'),(7,'Crocs'),(8,'DC'),(9,'Vans'),(10,'Le coq sportif');
 
 
 DROP TABLE IF EXISTS `categoria`;
@@ -65,7 +65,7 @@ CREATE TABLE `categoria` (
   PRIMARY KEY (`categoria_id`)
 ) ;
 
-INSERT INTO `categoria` VALUES (1,'Calzado y zapatillas'),(2,'Remeras'),(3,'Pantalones'),(4,'Buzos y camperas'),(5,'Pelotas'),(6,'Trajes de baño'),(7,'Ropa interior'),(8,'Otros');
+INSERT INTO `categoria` VALUES (0,'Otros')(1,'Calzado y zapatillas'),(2,'Remeras'),(3,'Pantalones'),(4,'Buzos y camperas'),(5,'Pelotas'),(6,'Trajes de baño'),(7,'Ropa interior');
 
 
 DROP TABLE IF EXISTS `producto`;
@@ -74,6 +74,7 @@ CREATE TABLE `producto` (
   `nombre` VARCHAR(80) NOT NULL,
   `descripcion` TEXT DEFAULT NULL,
   `precio` FLOAT NOT NULL,
+  `stock` INTEGER NOT NULL,
   `categoria_id` INTEGER DEFAULT NULL,
   `marca_id` INTEGER DEFAULT NULL,
   `fecha_de_publicacion` DATETIME NOT NULL,

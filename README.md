@@ -17,13 +17,13 @@
 - [ ] Modificar datos usuario
 - [x] AGREGAR REGISTRO DIRECCIONES! < IMPORTANTE
 - [x] Añadir producto
-- [ ] Modificar datos producto
+- [x] Modificar datos producto
 - [ ] Añadir a carrito
 - [ ] Modificar carrito
-- [ ] Registro compra
+- [ ] Registro compra > Afecta stock de productos
 
 **Agregar:**
-- [x] validate_email
+- [x] validate_email (necesita py3dns)
 - [x] getpass
 
 **Hay q estructurar el programa:**

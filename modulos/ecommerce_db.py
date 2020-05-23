@@ -9,6 +9,7 @@ queries = {
     "select_datos_usuario":"SELECT * FROM usuario WHERE usuario_id = %s",
     "select_categoria_id":"SELECT categoria_id FROM categoria WHERE nombre = %s",
     "select_marca_id":"SELECT marca_id FROM marca WHERE nombre = %s",
+    "select_productos_nombre":"SELECT * FROM producto WHERE nombre = %s",
     "select_pais_id":"SELECT pais_id FROM pais WHERE nombre = %s",
     "select_provincia_id":"SELECT provincia_id FROM provincia WHERE nombre = %s AND pais_id %s",
     "select_ciudad_id":"SELECT ciudad_id FROM ciudad WHERE nombre = %s AND provincia_id = %s",
@@ -22,7 +23,7 @@ queries = {
     "update_usuario_direccion_id":"UPDATE usuario SET direccion_id = %s WHERE usuario_id = %s",
     "update_direccion_calle_y_altura":"UPDATE direccion SET calle = %s, altura = %s WHERE direccion_id = %s",
     "update_direccion_codigo_postal":"UPDATE direccion SET codigo_posta = %s WHERE direccion_id = %s",
-    "insert_producto":"INSERT INTO producto(nombre, descripcion, precio, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+    "insert_producto":"INSERT INTO producto(nombre, descripcion, precio, stock, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
     "insert_usuario":"INSERT INTO usuario(dni, nombre, apellido, fecha_de_nacimiento, email, clave, telefono, fecha_de_registro) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
     "insert_compra":"INSERT INTO compra(usuario_id, direccion_id, producto_id, cantidad, precio_total, fecha_de_compra) VALUES (%s, %s, %s, %s, %s, %s)",
     "insert_direccion":"INSERT INTO direccion(calle, altura, codigo_postal, ciudad_id) VALUES (%s, %s, %s, %s)",
@@ -52,63 +53,71 @@ class Ecommerce_db:
         resultados = self.cursor.fetchall()
         return resultados
 
+    def productos_por_nombre(self, producto_nombre):
+        val = (producto_nombre,)
+        self.cursor.execute(queries["select_productos_nombre"], val)
+        resultados = self.cursor.fetchall()
+        return resultados
+
     def datos_de_usuario_id(self, usuario_id):
         val = (usuario_id,)
         self.cursor.execute(queries["select_datos_usuario"], val)
-        return self.cursor.fetchone()
+        resultado = self.cursor.fetchone()
+        return resultado
 
     def datos_login(self, email):
         val = (email,)
         self.cursor.execute(queries["select_datos_login"], val)
-        return self.cursor.fetchone()
+        resultado = self.cursor.fetchone()
+        return resultado
 
     def id_de_categoria(self, categoria_nombre):
         val = (categoria_nombre,)
         self.cursor.execute(queries["select_categoria_id"], val)
         categoria_id = self.cursor.fetchone()
         if not categoria_id:
-            categoria_id = 0
-        return categoria_id
+            categoria_id = (0,)
+        return categoria_id[0]
 
     def id_de_marca(self, marca_nombre):
         val = (marca_nombre,)
         self.cursor.execute(queries["select_marca_id"], val)
         marca_id = self.cursor.fetchone()
         if not marca_id:
-            marca_id = 0
-        return marca_id
+            marca_id = (0,)
+        return marca_id[0]
 
     def id_de_pais(self, pais_nombre):
         val = (pais_nombre,)
         self.cursor.execute(queries["select_pais_id"], val)
         pais_id = self.cursor.fetchone()
         if not pais_id:
-            pais_id = 0
-        return pais_id
+            pais_id = (0,)
+        return pais_id[0]
 
     def id_de_provincia(self, provincia_nombre, pais_id):
         val = (provincia_nombre, pais_id)
         self.cursor.execute(queries["select_provincia_id"], val)
         provincia_id = self.cursor.fetchone()
         if not provincia_id:
-            provincia_id = 0
-        return provincia_id
+            provincia_id = (0,)
+        return provincia_id[0]
 
     def id_de_ciudad(self, ciudad_nombre, provincia_id):
         val = (ciudad_nombre, provincia_id)
         self.cursor.execute(queries["select_ciudad_id"], val)
         ciudad_id = self.cursor.fetchone()
         if not ciudad_id:
-            ciudad_id = 0
-        return ciudad_id
+            ciudad_id = (0,)
+        return ciudad_id[0]
 
     def precio_producto_id(self, producto):
         val = (producto.get_producto_id(),)
         self.cursor.execute(queries["select_producto_precio"], val)
         precio = self.cursor.fetchone()
         if not precio:
-            precio = 0
-        return precio
+            precio = (-1,)
+        return precio[0]
 
     def registrar_usuario(self, usuario):
         val = (usuario.get_dni(), usuario.get_nombre(), usuario.get_apellido(), usuario.get_fecha_de_nacimiento(), usuario.get_email(), usuario.get_clave(), usuario.get_telefono(), usuario.get_fecha_de_registro())
@@ -117,7 +126,7 @@ class Ecommerce_db:
         usuario.set_usuario_id(self.cursor.lastrowid)
 
     def registrar_producto(self, producto):
-        val = (producto.get_nombre(), producto.get_descripcion(), producto.get_precio(), producto.get_categoria_id(), producto.get_marca_id(), producto.get_fecha_de_publicacion(), producto.get_fecha_de_ultima_modificacion())
+        val = (producto.get_nombre(), producto.get_descripcion(), producto.get_precio(), producto.get_stock(), producto.get_categoria_id(), producto.get_marca_id(), producto.get_fecha_de_publicacion(), producto.get_fecha_de_ultima_modificacion())
         self.cursor.execute(queries["insert_producto"], val)
         self.conexion.commit()
         producto.set_producto_id(self.cursor.lastrowid)
