@@ -9,6 +9,9 @@ queries = {
     "select_datos_usuario":"SELECT * FROM usuario WHERE usuario_id = %s",
     "select_categoria_id":"SELECT categoria_id FROM categoria WHERE nombre = %s",
     "select_marca_id":"SELECT marca_id FROM marca WHERE nombre = %s",
+    "select_pais_id":"SELECT pais_id FROM pais WHERE nombre = %s",
+    "select_provincia_id":"SELECT provincia_id FROM provincia WHERE nombre = %s AND pais_id %s",
+    "select_ciudad_id":"SELECT ciudad_id FROM ciudad WHERE nombre = %s AND provincia_id = %s",
     "update_producto_nombre":"UPDATE producto SET nombre = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_descripcion":"UPDATE producto SET descripcion = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_precio":"UPDATE producto SET precio = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
@@ -19,8 +22,11 @@ queries = {
     "insert_producto":"INSERT INTO producto(nombre, descripcion, precio, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion) VALUES (%s, %s, %s, %s, %s, %s, %s)",
     "insert_usuario":"INSERT INTO usuario(dni, nombre, apellido, fecha_de_nacimiento, email, clave, telefono, fecha_de_registro) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
     "insert_compra":"INSERT INTO compra(usuario_id, direccion_id, producto_id, cantidad, precio_total, fecha_de_compra) VALUES (%s, %s, %s, %s, %s, %s)",
+    "insert_direccion":"INSERT INTO direccion(calle, altura, codigo_postal, ciudad_id) VALUES (%s, %s, %s, %s)",
     "delete_producto":"DELETE FROM producto WHERE producto_id = %s",
     "delete_usuario":"DELETE FROM usuario WHERE usuario_id = %s",
+    "delete_carrito":"DELETE FROM carrito WHERE carrito_id = %s",
+    "delete_direccion":"DELETE FROM direccion WHERE direccion_id = %s",
 }
 
 class Ecommerce_db:
@@ -69,6 +75,30 @@ class Ecommerce_db:
             marca_id = 0
         return marca_id
 
+    def id_de_pais(self, pais_nombre):
+        val = (pais_nombre,)
+        self.cursor.execute(queries["select_pais_id"], val)
+        pais_id = self.cursor.fetchone()
+        if not pais_id:
+            pais_id = 0
+        return pais_id
+
+    def id_de_provincia(self, provincia_nombre, pais_id):
+        val = (provincia_nombre, pais_id)
+        self.cursor.execute(queries["select_provincia_id"], val)
+        provincia_id = self.cursor.fetchone()
+        if not provincia_id:
+            provincia_id = 0
+        return provincia_id
+
+    def id_de_ciudad(self, ciudad_nombre, provincia_id):
+        val = (ciudad_nombre, provincia_id)
+        self.cursor.execute(queries["select_ciudad_id"], val)
+        ciudad_id = self.cursor.fetchone()
+        if not ciudad_id:
+            ciudad_id = 0
+        return ciudad_id
+
     def registrar_usuario(self, usuario):
         val = (usuario.get_dni(), usuario.get_nombre(), usuario.get_apellido(), usuario.get_fecha_de_nacimiento(), usuario.get_email(), usuario.get_clave(), usuario.get_telefono(), usuario.get_fecha_de_registro())
         self.cursor.execute(queries["insert_usuario"], val)
@@ -86,6 +116,12 @@ class Ecommerce_db:
         self.cursor.execute(queries["insert_compra"], val)
         self.conexion.commit()
         compra.set_compra_id(self.cursor.lastrowid)
+
+    def registrar_direccion(self, direccion):
+        val = (direccion.get_calle(), direccion.get_altura(), direccion.get_codigo_postal(), direccion.get_ciudad_id())
+        self.cursor.execute(queries["insert_direccion"], val)
+        self.conexion.commit()
+        direccion.set_direccion_id(self.cursor.lastrowid)
 
     def eliminar_usuario(self, usuario):
         val = (usuario.get_id(),)
@@ -136,3 +172,9 @@ class Ecommerce_db:
         val = (producto.get_precio(), producto.get_fecha_de_ultima_modificacion(), producto.get_producto_id())
         self.cursor.execute(queries["update_producto_precio"], val)
         self.conexion.commit()
+
+    def actualizar_direccion_calle_y_altura(self, direccion):
+        pass
+
+    def actualizar_direccion_codigo_postal(self, direccion):
+        pass

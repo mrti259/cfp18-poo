@@ -9,3 +9,4 @@ from modulos.usuarios import Usuario, encriptar
 from modulos.productos import Producto
 from modulos.compras import Compra
 from modulos.carrito import Carrito
+from modulos.direcciones import Direccion

@@ -15,8 +15,8 @@
 - [x] Login
 - [x] Registro usuario
 - [ ] Modificar datos usuario
-- [ ] AGREGAR REGISTRO DIRECCIONES! < IMPORTANTE
-- [ ] Añadir producto
+- [x] AGREGAR REGISTRO DIRECCIONES! < IMPORTANTE
+- [x] Añadir producto
 - [ ] Modificar datos producto
 - [ ] Añadir a carrito
 - [ ] Modificar carrito
