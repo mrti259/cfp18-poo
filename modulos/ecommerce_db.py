@@ -12,6 +12,7 @@ queries = {
     "select_pais_id":"SELECT pais_id FROM pais WHERE nombre = %s",
     "select_provincia_id":"SELECT provincia_id FROM provincia WHERE nombre = %s AND pais_id %s",
     "select_ciudad_id":"SELECT ciudad_id FROM ciudad WHERE nombre = %s AND provincia_id = %s",
+    "select_producto_precio":"SELECT precio FROM producto WHERE producto_id = %s",
     "update_producto_nombre":"UPDATE producto SET nombre = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_descripcion":"UPDATE producto SET descripcion = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_precio":"UPDATE producto SET precio = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
@@ -19,6 +20,8 @@ queries = {
     "update_usuario_clave":"UPDATE usuario SET clave = %s WHERE usuario_id = %s",
     "update_usuario_telefono":"UPDATE usuario SET telefono = %s WHERE usuario_id = %s",
     "update_usuario_direccion_id":"UPDATE usuario SET direccion_id = %s WHERE usuario_id = %s",
+    "update_direccion_calle_y_altura":"UPDATE direccion SET calle = %s, altura = %s WHERE direccion_id = %s",
+    "update_direccion_codigo_postal":"UPDATE direccion SET codigo_posta = %s WHERE direccion_id = %s",
     "insert_producto":"INSERT INTO producto(nombre, descripcion, precio, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion) VALUES (%s, %s, %s, %s, %s, %s, %s)",
     "insert_usuario":"INSERT INTO usuario(dni, nombre, apellido, fecha_de_nacimiento, email, clave, telefono, fecha_de_registro) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
     "insert_compra":"INSERT INTO compra(usuario_id, direccion_id, producto_id, cantidad, precio_total, fecha_de_compra) VALUES (%s, %s, %s, %s, %s, %s)",
@@ -99,6 +102,14 @@ class Ecommerce_db:
             ciudad_id = 0
         return ciudad_id
 
+    def precio_producto_id(self, producto):
+        val = (producto.get_producto_id(),)
+        self.cursor.execute(queries["select_producto_precio"], val)
+        precio = self.cursor.fetchone()
+        if not precio:
+            precio = 0
+        return precio
+
     def registrar_usuario(self, usuario):
         val = (usuario.get_dni(), usuario.get_nombre(), usuario.get_apellido(), usuario.get_fecha_de_nacimiento(), usuario.get_email(), usuario.get_clave(), usuario.get_telefono(), usuario.get_fecha_de_registro())
         self.cursor.execute(queries["insert_usuario"], val)
@@ -174,7 +185,11 @@ class Ecommerce_db:
         self.conexion.commit()
 
     def actualizar_direccion_calle_y_altura(self, direccion):
-        pass
+        val = (direccion.get_calle(), direccion.get_altura(), direccion.get_id())
+        self.cursor.execute(queries["update_direccion_calle_y_altura"], val)
+        self.conexion.commit()
 
     def actualizar_direccion_codigo_postal(self, direccion):
-        pass
+        val = (direccion.get_codigo_postal(); direccion.get_direccion_id())
+        self.cursor.execute(queries["update_direccin_codigo_postal"], val)
+        self.conexion.commit()
