@@ -45,4 +45,26 @@ def modificar_precio(producto):
         pass
 
 def menu_producto():
+    print("Que accion desea realizar:")
+    print("1. Agregar producto")
+    print("2. Modificar producto producto")
+    print("3. Eliminar producto")
+    print("4. SALIR")
+    opc=int(input(""))
+
+    if (opc==1):
+        crear_producto()
+    elif (opc==2):
+        print("Que desea modificar: ")
+        print("1. Nombre")
+        print("2. Descripcion")
+        print("3. Precio")
+        print("4. Salir")
+        opc2 = input()
+    
+
+
+
     pass
+menu_producto()
+print()

@@ -190,6 +190,6 @@ class Ecommerce_db:
         self.conexion.commit()
 
     def actualizar_direccion_codigo_postal(self, direccion):
-        val = (direccion.get_codigo_postal(); direccion.get_direccion_id())
+        val = (direccion.get_codigo_postal(), direccion.get_direccion_id())
         self.cursor.execute(queries["update_direccin_codigo_postal"], val)
         self.conexion.commit()
