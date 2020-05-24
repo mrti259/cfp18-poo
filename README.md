@@ -21,6 +21,7 @@
 - [ ] Añadir a carrito
 - [ ] Modificar carrito
 - [ ] Registro compra > Afecta stock de productos
+- [ ] validaciones ?
 
 **Agregar:**
 - [x] validate_email (necesita py3dns)

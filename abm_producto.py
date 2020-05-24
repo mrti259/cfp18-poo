@@ -22,17 +22,26 @@ def buscar_producto_por_nombre():
     return producto
 
 def registrar_producto():
+    print("espacio publicitario")
     nombre = input("Nombre: ")
     descripcion = input("Descripcion: ")
     precio = float(input("Precio: "))
+    print("--para lista pulse L--")
     categoria = input("Categoria: ")
+    while categoria == "l" or categoria == "L":
+
+        categoria = input("Categoria: ")
+
+    print("--para lista pulse L--")
     marca = input("Marca: ")
+    while marca == "l" or marca == "L":
+        for i in db.todas_las_marcas():
+            print(i)
+        marca = input("Marca: ")
     stock = int(input("Cantidad disponible: "))
-    categoria_id = db.id_de_categoria(categoria)
-    marca_id = db.id_de_marca(marca)
     fecha_de_publicacion = str(datetime.now())
     fecha_de_ultima_modificacion = str(datetime.now())
-    producto = Producto(0, nombre, descripcion, precio, stock, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion)
+    producto = Producto(0, nombre, descripcion, precio, stock, categoria, marca, fecha_de_publicacion, fecha_de_ultima_modificacion)
     db.registrar_producto(producto)
     return producto
 
@@ -72,6 +81,16 @@ def modificar_precio(producto):
     else:
         pass
 
+def listar_productos():
+    for datos in db.todos_los_productos():
+        print(datos)
+def listar_categorias():
+    for datos in db.todas_las_categorias():
+        print(datos)
+
+def listar_marcas():
+    for datos in db.todas_las_categorias():
+        print(datos)
 def menu_modificar_producto(producto):
     print("Que desea modificar: ")
     print("1. Nombre")
@@ -91,19 +110,22 @@ def menu_producto():
     print("1. Agregar producto")
     print("2. Modificar producto")
     print("3. Eliminar producto")
-    print("4. SALIR")
+    print("4. Lista de productos")
+    print("0. SALIR")
     opc=input("n: ")
     if opc== "1":
         registrar_producto()
     elif opc == "4":
+        listar_productos()
+    elif opc == "0":
         print("Salir")
     else:
         producto = buscar_producto_por_nombre()
         if producto:
+
             if opc == "3":
                 eliminar_producto(producto)
             if opc=="2":
                 menu_modificar_producto(producto)
 
 menu_producto()
-print()

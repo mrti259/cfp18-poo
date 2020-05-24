@@ -1,10 +1,11 @@
 import mysql.connector
-from modulos.dbconf import *
 
 queries = {
     "select_usuarios":"SELECT * FROM usuario",
     "select_productos":"SELECT * FROM producto",
     "select_compras":"SELECT * FROM compra",
+    "select_categorias":"SELECT * FROM categoria",
+    "select_marcas":"SELECT * FROM marca",
     "select_datos_login":"SELECT clave, usuario_id FROM usuario WHERE email = %s",
     "select_datos_usuario":"SELECT * FROM usuario WHERE usuario_id = %s",
     "select_categoria_id":"SELECT categoria_id FROM categoria WHERE nombre = %s",
@@ -13,6 +14,10 @@ queries = {
     "select_pais_id":"SELECT pais_id FROM pais WHERE nombre = %s",
     "select_provincia_id":"SELECT provincia_id FROM provincia WHERE nombre = %s AND pais_id %s",
     "select_ciudad_id":"SELECT ciudad_id FROM ciudad WHERE nombre = %s AND provincia_id = %s",
+    "select_direccion_por_id":"SELECT * FROM direccion WHERE direccion_id = %s",
+    "select_ciudad_nombre_y_provincia_id":"SELECT nombre, provincia_id FROM ciudad WHERE ciudad_id  = %s",
+    "select_provincia_nombre_y_pais_id":"SELECT nombre, pais_id FROM provincia WHERE provincia_id = %s",
+    "select_pais_nombre":"SELECT nombre FROM pais WHERE pais_id = %s",
     "select_producto_precio":"SELECT precio FROM producto WHERE producto_id = %s",
     "update_producto_nombre":"UPDATE producto SET nombre = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_descripcion":"UPDATE producto SET descripcion = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
@@ -51,6 +56,16 @@ class Ecommerce_db:
     def todas_las_compras(self):
         self.cursor.execute(queries["select_compras"])
         resultados = self.cursor.fetchall()
+        return resultados
+
+    def todas_las_categorias(self):
+        self.cursor.execute(queries["select_categorias"])
+        resultados = self.cursor.fetchall()
+        return resultados
+
+    def todas_las_marcas(self):
+        self.cursor.execute(queries["select_marcas"])
+        resultados=self.cursor.fetchall()
         return resultados
 
     def productos_por_nombre(self, producto_nombre):
@@ -111,7 +126,31 @@ class Ecommerce_db:
             ciudad_id = (0,)
         return ciudad_id[0]
 
-    def precio_producto_id(self, producto):
+    def direccion_por_id(self, direccion_id):
+        val = (direccion_id,)
+        self.cursor.execute(queries["select_direccion_por_id"])
+        resultado = self.cursor.fetchone()
+        return resultado
+
+    def ciudad_por_id(self, ciudad_id):
+        val = (ciudad_id.)
+        self.cursor.execute(queries["select_ciudad_nombre_y_provincia_id"], val)
+        resultados = self.cursor.fetchone()
+        return resultados
+
+    def provincia_por_id(self, provincia_id):
+        val = (prinvicia_id,)
+        self.cursor.execute(queries["select_provincia_nombre_y_pais_id"], val)
+        resultados = self.cursor.fetchone()
+        return resultados
+
+    def pais_por_id(self, pais_id):
+        val = (pais_id,)
+        self.cursor.execute(queries["select_pais_nombre"], val)
+        resultados = self.cursor.fetchone()
+        return resultados
+
+    def precio_de_producto_id(self, producto):
         val = (producto.get_producto_id(),)
         self.cursor.execute(queries["select_producto_precio"], val)
         precio = self.cursor.fetchone()

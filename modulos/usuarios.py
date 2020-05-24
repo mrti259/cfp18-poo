@@ -17,68 +17,57 @@ class Usuario:
         self.set_fecha_de_registro(fecha_de_registro)
         self.carrito = []
 
+    def set_usuario_id(self, usuario_id):
+        self.usuario_id = usuario_id
     def get_usuario_id(self):
         return self.usuario_id
 
+    def set_dni(self, dni):
+        self.dni = dni
     def get_dni(self):
         return self.dni
 
+    def set_nombre(self, nombre):
+        self.nombre = nombre.capitalize()
     def get_nombre(self):
         return self.nombre
 
+    def set_apellido(self, apellido):
+        self.apellido = apellido.capitalize()
     def get_apellido(self):
         return self.apellido
 
+    def set_fecha_de_nacimiento(self, fecha_de_nacimiento):
+        self.fecha_de_nacimiento = fecha_de_nacimiento
     def get_fecha_de_nacimiento(self):
         return self.fecha_de_nacimiento
 
+    def set_email(self, email):
+        self.email = email
     def get_email(self):
         return self.email
 
+    def set_clave(self, clave):
+        self.clave = clave
     def get_clave(self):
         return encriptar(self.clave)
 
+    def set_telefono(self, telefono):
+        self.telefono = telefono
     def get_telefono(self):
         return self.telefono
 
+    def set_direccion_id(self, direccion_id):
+        self.direccion_id = direccion_id
     def get_direccion_id(self):
         return self.direccion_id
 
+    def set_fecha_de_registro(self, fecha_de_registro):
+        self.fecha_de_registro = fecha_de_registro
     def get_fecha_de_registro(self):
         return self.fecha_de_registro
 
-    def get_carrito(self):
-        return self.carrito
-
-    def set_usuario_id(self, usuario_id):
-        self.usuario_id = usuario_id
-
-    def set_dni(self, dni):
-        self.dni = dni
-
-    def set_nombre(self, nombre):
-        self.nombre = nombre.capitalize()
-
-    def set_apellido(self, apellido):
-        self.apellido = apellido.capitalize()
-
-    def set_fecha_de_nacimiento(self, fecha_de_nacimiento):
-        self.fecha_de_nacimiento = fecha_de_nacimiento
-
-    def set_email(self, email):
-        self.email = email
-
-    def set_clave(self, clave):
-        self.clave = clave
-
-    def set_telefono(self, telefono):
-        self.telefono = telefono
-
-    def set_direccion_id(self, direccion_id):
-        self.direccion_id = direccion_id
-
-    def set_fecha_de_registro(self, fecha_de_registro):
-        self.fecha_de_registro = fecha_de_registro
-
     def cargar_carrito(self, carrito):
         self.carrito.concat(carrito)
+    def get_carrito(self):
+        return self.carrito
