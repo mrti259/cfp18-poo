@@ -5,6 +5,8 @@ queries = {
     "select_usuarios":"SELECT * FROM usuario",
     "select_productos":"SELECT * FROM producto",
     "select_compras":"SELECT * FROM compra",
+    "select_categorias":"SELECT * FROM categoria",
+    "select_marcas":"SELECT * FROM marca",
     "select_datos_login":"SELECT clave, usuario_id FROM usuario WHERE email = %s",
     "select_datos_usuario":"SELECT * FROM usuario WHERE usuario_id = %s",
     "select_categoria_id":"SELECT categoria_id FROM categoria WHERE nombre = %s",
@@ -51,6 +53,16 @@ class Ecommerce_db:
     def todas_las_compras(self):
         self.cursor.execute(queries["select_compras"])
         resultados = self.cursor.fetchall()
+        return resultados
+
+    def todas_las_categorias(self):
+        self.cursor.execute(queries["select_categorias"])
+        resultados = self.cursor.fetchall()
+        return resultados
+
+    def todas_las_marcas(self):
+        self.cursor.execute(queries["select_marcas"])
+        resultados=self.cursor.fetchall()
         return resultados
 
     def productos_por_nombre(self, producto_nombre):
