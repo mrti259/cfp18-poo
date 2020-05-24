@@ -22,23 +22,21 @@ def buscar_producto_por_nombre():
     return producto
 
 def registrar_producto():
-    print("espacio publicitario")
     nombre = input("Nombre: ")
     descripcion = input("Descripcion: ")
     precio = float(input("Precio: "))
     print("--para lista pulse L--")
     categoria = input("Categoria: ")
     while categoria == "l" or categoria == "L":
-
+        listar_categorias()
         categoria = input("Categoria: ")
-
     print("--para lista pulse L--")
     marca = input("Marca: ")
     while marca == "l" or marca == "L":
-        for i in db.todas_las_marcas():
-            print(i)
+        listar_marcas()
         marca = input("Marca: ")
     stock = int(input("Cantidad disponible: "))
+
     fecha_de_publicacion = str(datetime.now())
     fecha_de_ultima_modificacion = str(datetime.now())
     producto = Producto(0, nombre, descripcion, precio, stock, categoria, marca, fecha_de_publicacion, fecha_de_ultima_modificacion)
@@ -87,10 +85,10 @@ def listar_productos():
 def listar_categorias():
     for datos in db.todas_las_categorias():
         print(datos)
-
 def listar_marcas():
     for datos in db.todas_las_categorias():
         print(datos)
+
 def menu_modificar_producto(producto):
     print("Que desea modificar: ")
     print("1. Nombre")
