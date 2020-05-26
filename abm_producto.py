@@ -86,7 +86,7 @@ def listar_categorias():
     for datos in db.todas_las_categorias():
         print(datos)
 def listar_marcas():
-    for datos in db.todas_las_categorias():
+    for datos in db.todas_las_marcas():
         print(datos)
 
 def menu_modificar_producto(producto):

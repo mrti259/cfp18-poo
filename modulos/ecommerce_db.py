@@ -6,6 +6,7 @@ queries = {
     "select_compras":"SELECT * FROM compra",
     "select_categorias":"SELECT * FROM categoria",
     "select_marcas":"SELECT * FROM marca",
+    "select_carrito_usuario":"SELECT * FROM carrito WHERE usuario_id = %s",
     "select_datos_login":"SELECT clave, usuario_id FROM usuario WHERE email = %s",
     "select_datos_usuario":"SELECT * FROM usuario WHERE usuario_id = %s",
     "select_categoria_id":"SELECT categoria_id FROM categoria WHERE nombre = %s",
@@ -28,6 +29,7 @@ queries = {
     "update_usuario_direccion_id":"UPDATE usuario SET direccion_id = %s WHERE usuario_id = %s",
     "update_direccion_calle_y_altura":"UPDATE direccion SET calle = %s, altura = %s WHERE direccion_id = %s",
     "update_direccion_codigo_postal":"UPDATE direccion SET codigo_posta = %s WHERE direccion_id = %s",
+    "update_producto_stock":"UPDATE producto SET stock = %s WHERE producto_id = %s",
     "insert_producto":"INSERT INTO producto(nombre, descripcion, precio, stock, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
     "insert_usuario":"INSERT INTO usuario(dni, nombre, apellido, fecha_de_nacimiento, email, clave, telefono, fecha_de_registro) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
     "insert_compra":"INSERT INTO compra(usuario_id, direccion_id, producto_id, cantidad, precio_total, fecha_de_compra) VALUES (%s, %s, %s, %s, %s, %s)",
@@ -68,9 +70,9 @@ class Ecommerce_db:
         resultados=self.cursor.fetchall()
         return resultados
 
-    def productos_por_nombre(self, producto_nombre):
-        val = (producto_nombre,)
-        self.cursor.execute(queries["select_productos_nombre"], val)
+    def carrito_de_usuario_segun_id(self, usuario_id):
+        val = (usuario_id,)
+        self.cursor.execute(queries["select_carrito_usuario"], val)
         resultados = self.cursor.fetchall()
         return resultados
 
@@ -158,6 +160,12 @@ class Ecommerce_db:
             precio = (-1,)
         return precio[0]
 
+    def productos_por_nombre(self, producto_nombre):
+        val = (producto_nombre,)
+        self.cursor.execute(queries["select_productos_nombre"], val)
+        resultados = self.cursor.fetchall()
+        return resultados
+
     def registrar_usuario(self, usuario):
         val = (usuario.get_dni(), usuario.get_nombre(), usuario.get_apellido(), usuario.get_fecha_de_nacimiento(), usuario.get_email(), usuario.get_clave(), usuario.get_telefono(), usuario.get_fecha_de_registro())
         self.cursor.execute(queries["insert_usuario"], val)
@@ -241,3 +249,8 @@ class Ecommerce_db:
         val = (direccion.get_codigo_postal(), direccion.get_direccion_id())
         self.cursor.execute(queries["update_direccin_codigo_postal"], val)
         self.conexion.commit()
+
+    def actualizar_producto_stock(self, producto):
+        val = (producto.get_stock(), producto.get_producto_id())
+        self.cursor.execute(queries["actualizar_producto_stock"], val)
+        self.conexcion.commit()

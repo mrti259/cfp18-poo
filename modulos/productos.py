@@ -27,6 +27,10 @@ class Producto:
 
     def set_stock(self, stock):
         self.stock = stock
+    def incr_stock(self, incr):
+        self.stock += incr
+    def decr_stock(self, decr):
+        self.stock -= decr
     def get_stock(self):
         return self.stock
 
