@@ -20,9 +20,12 @@ queries = {
     "select_provincia_nombre_y_pais_id":"SELECT nombre, pais_id FROM provincia WHERE provincia_id = %s",
     "select_pais_nombre":"SELECT nombre FROM pais WHERE pais_id = %s",
     "select_producto_precio":"SELECT precio FROM producto WHERE producto_id = %s",
+
     "update_producto_nombre":"UPDATE producto SET nombre = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_descripcion":"UPDATE producto SET descripcion = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_precio":"UPDATE producto SET precio = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
+    "update_usuario_nombre":"UPDATE usuario SET nombre = %s WHERE usuario_id = %s",
+    "update_usuario_apellido":"UPDATE usuario SET apellido = %s WHERE usuario_id = %s",
     "update_usuario_email":"UPDATE usuario SET email = %s WHERE usuario_id = %s",
     "update_usuario_clave":"UPDATE usuario SET clave = %s WHERE usuario_id = %s",
     "update_usuario_telefono":"UPDATE usuario SET telefono = %s WHERE usuario_id = %s",
@@ -30,10 +33,12 @@ queries = {
     "update_direccion_calle_y_altura":"UPDATE direccion SET calle = %s, altura = %s WHERE direccion_id = %s",
     "update_direccion_codigo_postal":"UPDATE direccion SET codigo_posta = %s WHERE direccion_id = %s",
     "update_producto_stock":"UPDATE producto SET stock = %s WHERE producto_id = %s",
+
     "insert_producto":"INSERT INTO producto(nombre, descripcion, precio, stock, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
     "insert_usuario":"INSERT INTO usuario(dni, nombre, apellido, fecha_de_nacimiento, email, clave, telefono, fecha_de_registro) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
     "insert_compra":"INSERT INTO compra(usuario_id, direccion_id, producto_id, cantidad, precio_total, fecha_de_compra) VALUES (%s, %s, %s, %s, %s, %s)",
     "insert_direccion":"INSERT INTO direccion(calle, altura, codigo_postal, ciudad_id) VALUES (%s, %s, %s, %s)",
+
     "delete_producto":"DELETE FROM producto WHERE producto_id = %s",
     "delete_usuario":"DELETE FROM usuario WHERE usuario_id = %s",
     "delete_carrito":"DELETE FROM carrito WHERE carrito_id = %s",
@@ -203,6 +208,16 @@ class Ecommerce_db:
     def eliminar_compra(self, usuario):
         val = (compra.get_id(),)
         self.cursor.execute(queries["delete_compra"], val)
+        self.conexion.commit()
+
+    def actualizar_usuario_nombre(self, usuario):
+        val = (usuario.get_direccion_id(), usuario.get_usuario_id())
+        self.cursor.execute(queries["update_usuario_nombre"], val)
+        self.conexion.commit()
+
+    def actualizar_usuario_apellido(self, usuario):
+        val = (usuario.get_direccion_id(), usuario.get_usuario_id())
+        self.cursor.execute(queries["update_usuario_apellido"], val)
         self.conexion.commit()
 
     def actualizar_usuario_direccion_id(self, usuario):
