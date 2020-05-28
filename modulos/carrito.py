@@ -2,7 +2,7 @@ class Carrito:
     def __init__(self, carrito_id, usuario_id, producto_id, cantidad):
         self.set_carrito_id(carrito_id)
         self.set_usuario_id(usuario_id)
-        self.set_producto(producto_id)
+        self.set_producto_id(producto_id)
         self.set_cantidad(cantidad)
         self.errores = {}
 
@@ -25,3 +25,6 @@ class Carrito:
         self.cantidad = cantidad
     def get_cantidad(self):
         return self.cantidad
+
+    def get_errores(self):
+        return [msg for msg in self.errores.values()]

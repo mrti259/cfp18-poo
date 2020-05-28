@@ -5,8 +5,8 @@ from getpass import getpass
 from validate_email import validate_email
 from modulos.ecommerce_db import Ecommerce_db
 from modulos.dbconf import dbconf
-from modulos.usuarios import Usuario, encriptar
-from modulos.productos import Producto
-from modulos.compras import Compra
+from modulos.usuario import Usuario, encriptar
+from modulos.producto import Producto
+from modulos.compra import Compra
 from modulos.carrito import Carrito
-from modulos.direcciones import Direccion
+from modulos.direccion import Direccion

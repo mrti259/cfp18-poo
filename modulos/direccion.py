@@ -40,3 +40,7 @@ class Direccion:
         self.ciudad_id = ciudad_id
     def get_ciudad_id(self):
         return self.ciudad_id
+
+    def get_errores(self):
+        return [msg for msg in self.errores.values()]
+s

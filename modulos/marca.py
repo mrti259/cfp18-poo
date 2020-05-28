@@ -16,3 +16,6 @@ class Marca:
             self.errores["nombre"] = "El nombre no es válido"
     def get_nombre(self):
         return self.nombre
+
+    def get_errores(self):
+        return [msg for msg in self.errores.values()]

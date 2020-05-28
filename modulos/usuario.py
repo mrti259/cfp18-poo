@@ -97,3 +97,6 @@ class Usuario:
         self.carrito.concat(lista_carrito)
     def get_carrito(self):
         return self.carrito
+
+    def get_errores(self):
+        return [msg for msg in self.errores.values()]

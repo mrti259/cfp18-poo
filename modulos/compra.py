@@ -43,3 +43,6 @@ class Compra:
         self.fecha_de_compra = fecha_de_compra
     def get_fecha_de_compra(self):
         return self.fecha_de_compra
+
+    def get_errores(self):
+        return [msg for msg in self.errores.values()]

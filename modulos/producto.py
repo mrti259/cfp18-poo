@@ -80,3 +80,6 @@ class Producto:
         self.fecha_de_ultima_modificacion = fecha_de_ultima_modificacion
     def get_fecha_de_ultima_modificacion(self):
         return self.fecha_de_ultima_modificacion
+
+    def get_errores(self):
+        return [msg for msg in self.errores.values()]
