@@ -4,6 +4,7 @@ class Carrito:
         self.set_usuario_id(usuario_id)
         self.set_producto(producto_id)
         self.set_cantidad(cantidad)
+        self.errores = {}
 
     def set_carrito_id(self, carrito_id):
         self.carrito_id = carrito_id

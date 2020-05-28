@@ -7,6 +7,7 @@ class Compra:
         self.set_cantidad(cantidad)
         self.set_precio_total(precio_total)
         self.set_fecha_de_compra(fecha_de_compra)
+        self.errores = {}
 
     def set_compra_id(self, compra_id):
         self.compra_id = compra_id

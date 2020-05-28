@@ -5,24 +5,34 @@ class Direccion:
         self.set_altura(altura)
         self.set_codigo_postal(codigo_postal)
         self.set_ciudad_id(ciudad_id)
-    
+        self.errores = {}
+
     def set_direccion_id(self, direccion_id):
         self.direccion_id = direccion_id
     def get_direccion_id(self):
         return self.direccion_id
 
     def set_calle(self, calle):
-        self.calle = calle
+        if calle.isalnum():
+            self.calle = calle.title()
+        else:
+            self.calle["calle"] = "La calle no se válida"
     def get_calle(self):
         return self.calle
 
     def set_altura(self, altura):
-        self.altura = altura
+        if altura.isdigit():
+            self.altura = int(altura)
+        else:
+            self.errores["altura"] = "No es una altura válida"
     def get_altura(self):
         return self.altura
 
     def set_codigo_postal(self, codigo_postal):
-        self.codigo_postal = codigo_postal
+        if codigo_postal.isalnum():
+            self.codigo_postal = codigo_postal
+        else:
+            self.errores["codigo_postal"] = "El código postal no es válido"
     def get_codigo_postal(self):
         return self.codigo_postal
 

@@ -196,17 +196,29 @@ class Ecommerce_db:
         direccion.set_direccion_id(self.cursor.lastrowid)
 
     def eliminar_usuario(self, usuario):
+        if usuario.get_carrito():
+            for carrito in usuario.get_carrito():
+                self.eliminar_carrito(carrito)
+        if usuario.get_compras():
+            for compra in usuario.get_compras():
+                compra.set_usuario_id(-1)
+                self.actualizar_compra_usuario_id(compra)
         val = (usuario.get_id(),)
         self.cursor.execute(queries["delete_usuario"], val)
         self.conexion.commit()
 
-    def eliminar_producto(self, usuario):
-        val = (producto.get_id(),)
+    def eliminar_producto(self, producto):
+        val = (producto.get_producto_id(),)
         self.cursor.execute(queries["delete_producto"], val)
         self.conexion.commit()
 
-    def eliminar_compra(self, usuario):
-        val = (compra.get_id(),)
+    def eliminar_carrito(self, carrito):
+        val = (carrito.get_carrito)
+        self.cursor.execute(queries["delete_carrito"], val)
+        self.conexion.commit()
+
+    def eliminar_compra(self, compra):
+        val = (compra.get_compra_id(),)
         self.cursor.execute(queries["delete_compra"], val)
         self.conexion.commit()
 

@@ -1,31 +1,27 @@
 **Base de datos:**
-- [x] Agregar carrito de compras
-- [x] Agregar fecha_de_compra DATETIME en compra
-- [x] Agregar fecha_de_publicacion DATETIME en producto
-- [x] Agregar fecha_de_nacimiento DATE en usuario
-- [x] Agregar fecha_de_registro DATETIME en usuario
+- Registros con id 0: son registros desconocidos
+- Registros con id -1: se ha eliminado su procedencia
+- Ej: un usuario quiere eliminar su cuenta. Se eliminan los registros de carrito con ese usuario_id, pero todavía se desea conservar el registro de compras: se reemplaza usuario_id por -1
+- [ ] Agregar Usuario con id -1
+
 
 **Modulos:**
-- [x] usuarios
-- [x] direcciones
-- [x] productos
-- [x] categorias
-- [x] compras
-- [x] carrito de compras ?
 - [x] Login
 - [x] Registro usuario
 - [ ] Modificar datos usuario
 - [x] AGREGAR REGISTRO DIRECCIONES! < IMPORTANTE
 - [x] Añadir producto
 - [x] Modificar datos producto
-- [ ] Añadir a carrito
+- [x] Añadir a carrito
 - [ ] Modificar carrito
 - [ ] Registro compra > Afecta stock de productos
 - [ ] validaciones ?
+- [x] Errores en clases
 
 **Agregar:**
 - [x] validate_email (necesita py3dns)
 - [x] getpass
+- [ ] flask
 
 **Hay q estructurar el programa:**
 - [x] Guardar modulos en una carpeta común

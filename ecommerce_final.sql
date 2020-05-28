@@ -127,4 +127,3 @@ CREATE TABLE `carrito` (
   FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`),
   FOREIGN KEY (`producto_id`) REFERENCES `producto` (`producto_id`)
 );
-ecommerce_final

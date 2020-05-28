@@ -9,6 +9,7 @@ class Producto:
         self.set_marca_id(marca_id)
         self.set_fecha_de_publicacion(fecha_de_publicacion)
         self.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
+        self.errores = {}
 
     def set_producto_id(self, producto_id):
         self.producto_id = producto_id
@@ -16,21 +17,36 @@ class Producto:
         return self.producto_id
 
     def set_nombre(self, nombre):
-        self.nombre = nombre
+        if nombre.isalnum():
+            self.nombre = nombre.title()
+        else:
+            self.errores["nombre"] = "El nombre no es válido"
     def get_nombre(self):
         return self.nombre
 
     def set_descripcion(self, descripcion):
-        self.descripcion = descripcion
+        if descripcion.isalnum():
+            self.descripcion = descripcion.capitalize()
+        else:
+            self.errores["descripcion"] = "La descripcion no es válida"
     def get_descripcion(self):
         return self.descripcion
 
     def set_stock(self, stock):
-        self.stock = stock
+        if stock.isdigit() and int(stock) > 0:
+            self.stock = int(stock)
+        else:
+            self.errores["stock"] = "El stock no es válido"
     def incr_stock(self, incr):
-        self.stock += incr
+        if incr.isdigit() and int(incr) >= stock:
+            self.stock += int(incr)
+        else:
+            self.errores["stock"] = "No es una cantidad válida"
     def decr_stock(self, decr):
-        self.stock -= decr
+        if incr.isdigit():
+            self.stock -= int(decr)
+        else:
+            self.errores["stock"] = "No es una cantidad válida"
     def get_stock(self):
         return self.stock
 
@@ -45,7 +61,13 @@ class Producto:
         return self.marca_id
 
     def set_precio(self, precio):
-        self.precio = precio
+        try:
+            if precio > 0:
+                self.precio = float(precio)
+            else:
+                self.errores["precio"] = "El precio no es válido"
+        except:
+            self.errores["precio"] = "El precio no es válido"
     def get_precio(self):
         return self.precio
 

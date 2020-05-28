@@ -1,4 +1,5 @@
 import base64
+from validate_email import validate_email
 
 def encriptar(clave):
     return base64.encodebytes(clave.encode())
@@ -15,7 +16,9 @@ class Usuario:
         self.set_telefono(telefono)
         self.set_direccion_id(direccion_id)
         self.set_fecha_de_registro(fecha_de_registro)
+        self.compra = []
         self.carrito = []
+        self.errores = {}
 
     def set_usuario_id(self, usuario_id):
         self.usuario_id = usuario_id
@@ -23,17 +26,26 @@ class Usuario:
         return self.usuario_id
 
     def set_dni(self, dni):
-        self.dni = dni
+        if dni.isdigit():
+            self.dni = int(dni)
+        else:
+            self.errores["dni"] = "El DNI no es válido."
     def get_dni(self):
         return self.dni
 
     def set_nombre(self, nombre):
-        self.nombre = nombre.capitalize()
+        if nombre.isalpha(nombre):
+            self.nombre = nombre.capitalize()
+        else:
+            self.errores["nombre"] = "El nombre no es válido"
     def get_nombre(self):
         return self.nombre
 
     def set_apellido(self, apellido):
-        self.apellido = apellido.capitalize()
+        if apellido.isalpha():
+            self.apellido = apellido.capitalize()
+        else:
+            self.errores["apellido"] = "El apellido no es válido"
     def get_apellido(self):
         return self.apellido
 
@@ -43,17 +55,26 @@ class Usuario:
         return self.fecha_de_nacimiento
 
     def set_email(self, email):
-        self.email = email
+        if validate_email(email, check_mx=True):
+            self.email = email
+        else:
+            self.errores["email"] = "El email no es válido"
     def get_email(self):
         return self.email
 
     def set_clave(self, clave):
-        self.clave = clave
+        if any(char.islower() in clave) and any(char.isupper() in clave) and any(char.isdigit() in clave):
+            self.clave = clave
+        else:
+            self.errores["clave"] = "La contraseña no cumple con los criterios: al menos una mayuscula, al menos una minuscula, al menos un numero"
     def get_clave(self):
         return encriptar(self.clave)
 
     def set_telefono(self, telefono):
-        self.telefono = telefono
+        if telefono.isdigit():
+            self.telefono = int(telefono)
+        else:
+            self.errores["telefono"] = "El teléfono no es válido"
     def get_telefono(self):
         return self.telefono
 
@@ -67,7 +88,12 @@ class Usuario:
     def get_fecha_de_registro(self):
         return self.fecha_de_registro
 
-    def cargar_carrito(self, carrito):
-        self.carrito.concat(carrito)
+    def cargar_compras(self, lista_compras):
+        self.carrito.concat(lista_compras)
+    def get_carrito(self):
+        return self.carrito
+
+    def cargar_carrito(self, lista_carrito):
+        self.carrito.concat(lista_carrito)
     def get_carrito(self):
         return self.carrito

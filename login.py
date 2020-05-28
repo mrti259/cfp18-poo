@@ -1,4 +1,4 @@
-from todos_los_modulos import *
+from todos_los_modulos import Ecommerce_db, Usuario, datetime, date, validate_email, getpass, encriptar
 
 db = Ecommerce_db(dbconf)
 
