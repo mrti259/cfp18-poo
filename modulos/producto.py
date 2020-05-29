@@ -1,5 +1,6 @@
 class Producto:
     def __init__(self, producto_id, nombre, descripcion, precio, stock, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion):
+        self.errores = {}
         self.set_producto_id(producto_id)
         self.set_nombre(nombre)
         self.set_descripcion(descripcion)
@@ -9,7 +10,6 @@ class Producto:
         self.set_marca_id(marca_id)
         self.set_fecha_de_publicacion(fecha_de_publicacion)
         self.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
-        self.errores = {}
 
     def set_producto_id(self, producto_id):
         self.producto_id = producto_id
@@ -33,18 +33,18 @@ class Producto:
         return self.descripcion
 
     def set_stock(self, stock):
-        if stock.isdigit() and int(stock) > 0:
-            self.stock = int(stock)
+        if stock >= 0:
+            self.stock = stock
         else:
             self.errores["stock"] = "El stock no es válido"
     def incr_stock(self, incr):
-        if incr.isdigit() and int(incr) >= stock:
-            self.stock += int(incr)
+        if incr > 0:
+            self.stock += incr
         else:
             self.errores["stock"] = "No es una cantidad válida"
     def decr_stock(self, decr):
-        if incr.isdigit():
-            self.stock -= int(decr)
+        if decr > stock:
+            self.stock -= decr
         else:
             self.errores["stock"] = "No es una cantidad válida"
     def get_stock(self):
@@ -61,12 +61,9 @@ class Producto:
         return self.marca_id
 
     def set_precio(self, precio):
-        try:
-            if precio > 0:
-                self.precio = float(precio)
-            else:
-                self.errores["precio"] = "El precio no es válido"
-        except:
+        if precio >= 0:
+            self.precio = precio
+        else:
             self.errores["precio"] = "El precio no es válido"
     def get_precio(self):
         return self.precio

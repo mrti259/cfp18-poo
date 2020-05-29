@@ -1,10 +1,10 @@
 class Carrito:
     def __init__(self, carrito_id, usuario_id, producto_id, cantidad):
+        self.errores = {}
         self.set_carrito_id(carrito_id)
         self.set_usuario_id(usuario_id)
         self.set_producto_id(producto_id)
         self.set_cantidad(cantidad)
-        self.errores = {}
 
     def set_carrito_id(self, carrito_id):
         self.carrito_id = carrito_id

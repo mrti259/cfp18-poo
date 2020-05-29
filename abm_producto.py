@@ -120,7 +120,6 @@ def menu_producto():
     else:
         producto = buscar_producto_por_nombre()
         if producto:
-
             if opc == "3":
                 eliminar_producto(producto)
             if opc=="2":

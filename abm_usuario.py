@@ -1,19 +1,21 @@
-from todos_los_modulos import Usuario, encriptar, validate_email, getpass
+from todos_los_modulos import Ecommerce_db, dbconf, Usuario, encriptar, validate_email, getpass
+
+db = Ecommerce_db
 
 def eliminar_usuario(usuario):
-    print(f"¿Quiere eliminar su cuenta?")
+    print("¿Quiere eliminar su cuenta?")
     if (input("Confirmar (s/n): ") == "s"):
         if (input("Esta acción no se puede deshacer (s/n): ") == 's'):
-            db.eliminar_producto(producto)
+            db.eliminar_usuario(usuario)
 
 def modificar_nombre(usuario):
     dato = input("Nuevo nombre: ")
-    opc=input("cambiar nombre por: ",dato)
-    if(opc):
-        usuario.set_nombre(dato)
+    usuario.set_nombre(dato)
+    if not usuario.get_errores():
         db.actualizar_usuario_nombre(usuario)
         print("-cambios realizados-")
     else:
+        print(usuario.get_errores())
         print("-cambios descartados-")
 
 def modificar_apellido(usuario):
@@ -90,13 +92,12 @@ def menu_modificar_usuario(usuario):
 
 def menu_perfil(usuario):
     print("Que accion desea realizar:")
-    print("1. Modificar Usuario")
-    print("2. Eliminar Usuario")
+    print("1. Modificar mi perfil")
+    print("2. Eliminar mi usuario")
     print("0. ATRAS")
-
-    opc=input("n: ")
+    opc=input("> ")
     if opc== "1":
-        menu_modificar_usuario(usuario
+        menu_modificar_usuario(usuario)
     elif opc == "2":
         eliminar_usuario(usuario)
     elif opc == "0":

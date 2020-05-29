@@ -140,7 +140,7 @@ class Ecommerce_db:
         return resultado
 
     def ciudad_por_id(self, ciudad_id):
-        val = (ciudad_id.)
+        val = (ciudad_id,)
         self.cursor.execute(queries["select_ciudad_nombre_y_provincia_id"], val)
         resultados = self.cursor.fetchone()
         return resultados
@@ -281,3 +281,11 @@ class Ecommerce_db:
         val = (producto.get_stock(), producto.get_producto_id())
         self.cursor.execute(queries["actualizar_producto_stock"], val)
         self.conexcion.commit()
+
+if __name__=="__main__":
+    from dbconf import dbconf
+    db = Ecommerce_db(dbconf)
+    lista_usuarios=db.todos_los_usuarios()
+    lista_productos=db.todos_los_productos()
+    print(lista_usuarios)
+    print(lista_productos)

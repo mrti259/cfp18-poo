@@ -4,8 +4,12 @@ from validate_email import validate_email
 def encriptar(clave):
     return base64.encodebytes(clave.encode())
 
+def desencriptar(clave):
+    return base64.decodebytes(clave.encode())
+
 class Usuario:
     def __init__(self, usuario_id, dni, nombre, apellido, fecha_de_nacimiento, email, clave, telefono, direccion_id, fecha_de_registro):
+        self.errores = {}
         self.set_usuario_id(usuario_id)
         self.set_dni(dni)
         self.set_nombre(nombre)
@@ -18,7 +22,6 @@ class Usuario:
         self.set_fecha_de_registro(fecha_de_registro)
         self.compra = []
         self.carrito = []
-        self.errores = {}
 
     def set_usuario_id(self, usuario_id):
         self.usuario_id = usuario_id
@@ -26,15 +29,12 @@ class Usuario:
         return self.usuario_id
 
     def set_dni(self, dni):
-        if dni.isdigit():
-            self.dni = int(dni)
-        else:
-            self.errores["dni"] = "El DNI no es válido."
+        self.dni = dni
     def get_dni(self):
         return self.dni
 
     def set_nombre(self, nombre):
-        if nombre.isalpha(nombre):
+        if nombre.isalpha():
             self.nombre = nombre.capitalize()
         else:
             self.errores["nombre"] = "El nombre no es válido"
@@ -63,7 +63,8 @@ class Usuario:
         return self.email
 
     def set_clave(self, clave):
-        if any(char.islower() in clave) and any(char.isupper() in clave) and any(char.isdigit() in clave):
+        clave = desencriptar(clave)
+        if any(char.islower() for char in clave) and any(char.isupper() for char in clave) and any(char.isdigit() for char in clave):
             self.clave = clave
         else:
             self.errores["clave"] = "La contraseña no cumple con los criterios: al menos una mayuscula, al menos una minuscula, al menos un numero"
@@ -71,10 +72,7 @@ class Usuario:
         return encriptar(self.clave)
 
     def set_telefono(self, telefono):
-        if telefono.isdigit():
-            self.telefono = int(telefono)
-        else:
-            self.errores["telefono"] = "El teléfono no es válido"
+        self.telefono = telefono
     def get_telefono(self):
         return self.telefono
 

@@ -1,4 +1,4 @@
-from todos_los_modulos import Ecommerce_db, Usuario, datetime, date, validate_email, getpass, encriptar
+from todos_los_modulos import Ecommerce_db, dbconf, Usuario, datetime, date, validate_email, getpass, encriptar
 
 db = Ecommerce_db(dbconf)
 
@@ -14,19 +14,24 @@ def registro_usuario(email):
                 nombre = input("Nombre: ")
                 apellido = input("Apellido: ")
                 print("Fecha de nacimiento:")
-                dd = int(input("Día (dd):"))
-                mm = int(input("Mes (mm):"))
-                aa = int(input("Año (aaaa):"))
+                dd = int(input("Día (dd): "))
+                mm = int(input("Mes (mm): "))
+                aa = int(input("Año (aaaa): "))
                 dni = int(input("Dni: "))
                 clave = getpass("Clave: ")
                 telefono = int(input("Telefono: "))
-                fecha_de_nacimiento = str(date(aa,mm,dd))
-                fecha_de_registro = str(datetime.now())
+                fecha_de_nacimiento = date(aa,mm,dd)
+                fecha_de_registro = datetime.now()
                 usuario = Usuario(0, dni, nombre, apellido, fecha_de_nacimiento, email, clave, telefono, 0, fecha_de_registro)
             except:
                 print("Ocurrio un error. Pruebe nuevamente")
-        print("Usuario creado")
-        db.registrar_usuario(usuario)
+        if not usuario.get_errores():
+            print("Usuario creado")
+            db.registrar_usuario(usuario)
+        else:
+            errores = usuario.get_errores()
+            for err in errores:
+                print(err)
 
 def inicio_sesion():
     email = input("Email: ")

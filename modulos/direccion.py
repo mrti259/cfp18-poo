@@ -1,11 +1,11 @@
 class Direccion:
     def __init__(self, direccion_id, calle, altura, codigo_postal, ciudad_id):
+        self.errores = {}
         self.set_direccion_id(direcion_id)
         self.set_calle(calle)
         self.set_altura(altura)
         self.set_codigo_postal(codigo_postal)
         self.set_ciudad_id(ciudad_id)
-        self.errores = {}
 
     def set_direccion_id(self, direccion_id):
         self.direccion_id = direccion_id
@@ -21,10 +21,7 @@ class Direccion:
         return self.calle
 
     def set_altura(self, altura):
-        if altura.isdigit():
-            self.altura = int(altura)
-        else:
-            self.errores["altura"] = "No es una altura válida"
+        self.altura = altura
     def get_altura(self):
         return self.altura
 
@@ -43,4 +40,4 @@ class Direccion:
 
     def get_errores(self):
         return [msg for msg in self.errores.values()]
-s
+

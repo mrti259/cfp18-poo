@@ -6,7 +6,7 @@
 
 
 **Modulos:**
-- [x] Login
+- [x] Login < retornar usuario
 - [x] Registro usuario
 - [ ] Modificar datos usuario
 - [x] AGREGAR REGISTRO DIRECCIONES! < IMPORTANTE
@@ -16,7 +16,7 @@
 - [ ] Modificar carrito
 - [ ] Registro compra > Afecta stock de productos
 - [ ] validaciones ?
-- [x] Errores en clases
+- [x] Errores en clases < complicó el código, tal vez lo saquemos
 
 **Agregar:**
 - [x] validate_email (necesita py3dns)
