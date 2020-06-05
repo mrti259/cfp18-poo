@@ -1,6 +1,5 @@
 class Compra:
     def __init__(self, compra_id, usuario_id, direccion_id, producto_id, cantidad, precio_total, fecha_de_compra):
-        self.errores = {}
         self.set_compra_id(compra_id)
         self.set_usuario_id(usuario_id)
         self.set_direccion_id(direccion_id)
@@ -44,5 +43,3 @@ class Compra:
     def get_fecha_de_compra(self):
         return self.fecha_de_compra
 
-    def get_errores(self):
-        return [msg for msg in self.errores.values()]

@@ -1,6 +1,5 @@
 class Categoria:
     def __init__(self,categoria_id,nombre):
-        self.errores = {}
         self.set_nombre(nombre)
         self.set_categoria_id(categoria_id)
 
@@ -10,12 +9,6 @@ class Categoria:
         return self.categoria_id
 
     def set_nombre(self, nombre):
-        if nombre.isalnum():
-            self.nombre = nombre.title()
-        else:
-            self.errores["nombre"] = "No es un nombre válido"
+        self.nombre = nombre.title()
     def get_nombre(self):
         return self.nombre
-
-    def get_errores(self):
-        return [msg for msg in self.errores.values()]

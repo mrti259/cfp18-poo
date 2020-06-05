@@ -1,6 +1,5 @@
 class Producto:
     def __init__(self, producto_id, nombre, descripcion, precio, stock, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion):
-        self.errores = {}
         self.set_producto_id(producto_id)
         self.set_nombre(nombre)
         self.set_descripcion(descripcion)
@@ -17,36 +16,21 @@ class Producto:
         return self.producto_id
 
     def set_nombre(self, nombre):
-        if nombre.isalnum():
-            self.nombre = nombre.title()
-        else:
-            self.errores["nombre"] = "El nombre no es válido"
+        self.nombre = nombre.title()
     def get_nombre(self):
         return self.nombre
 
     def set_descripcion(self, descripcion):
-        if descripcion.isalnum():
-            self.descripcion = descripcion.capitalize()
-        else:
-            self.errores["descripcion"] = "La descripcion no es válida"
+        self.descripcion = descripcion.capitalize()
     def get_descripcion(self):
         return self.descripcion
 
     def set_stock(self, stock):
-        if stock >= 0:
-            self.stock = stock
-        else:
-            self.errores["stock"] = "El stock no es válido"
+        self.stock = stock
     def incr_stock(self, incr):
-        if incr > 0:
-            self.stock += incr
-        else:
-            self.errores["stock"] = "No es una cantidad válida"
+        self.stock += incr
     def decr_stock(self, decr):
-        if decr > stock:
-            self.stock -= decr
-        else:
-            self.errores["stock"] = "No es una cantidad válida"
+        self.stock -= decr
     def get_stock(self):
         return self.stock
 
@@ -61,10 +45,7 @@ class Producto:
         return self.marca_id
 
     def set_precio(self, precio):
-        if precio >= 0:
-            self.precio = precio
-        else:
-            self.errores["precio"] = "El precio no es válido"
+        self.precio = precio
     def get_precio(self):
         return self.precio
 
@@ -77,6 +58,3 @@ class Producto:
         self.fecha_de_ultima_modificacion = fecha_de_ultima_modificacion
     def get_fecha_de_ultima_modificacion(self):
         return self.fecha_de_ultima_modificacion
-
-    def get_errores(self):
-        return [msg for msg in self.errores.values()]
