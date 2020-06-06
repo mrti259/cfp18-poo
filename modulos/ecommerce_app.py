@@ -4,11 +4,10 @@ import datetime
 from getpass import getpass
 from base64 import encodebytes, decodebytes
 from validate_email import validate_email
-from dbconf import dbconf
 from ecommerce_db import Ecommerce_db
 from producto import Producto
 from usuario import Usuario
-from formularios import formulario_registro
+from formulario import formulario_registro
 
 def limpiar_pantalla():
     '''Simplemente limpia la pantalla'''
@@ -95,10 +94,10 @@ class Ecommerce_app:
         al usuario y vuelve a menu_inicio(). En caso que el email exista, se comprueba
         si las claves concuerdan y se procede a inicializar el usuario'''
 
-        datos_db = self.db.datos_login(email)
+        datos_db = self.db.get_datos_login(email)
         if datos_db:
             if clave == datos_db[0].encode():
-                datos_usuario = self.db.datos_de_usuario_id(datos_db[1])
+                datos_usuario = self.db.get_usuario_segun_id(datos_db[1])
                 self.usuario = Usuario(*datos_usuario)
                 print("Inicio de sesión exitoso")
             else:
@@ -115,7 +114,7 @@ class Ecommerce_app:
 
         limpiar_pantalla()
         usuario = Usuario(0, *formulario_registro(), 0, datetime.datetime.now())
-        datos_login = self.db.datos_login(usuario.get_email())
+        datos_login = self.db.get_datos_login(usuario.get_email())
         if datos_login:
             print("Ese email ya se encuentra registrado")
         else:
@@ -130,7 +129,7 @@ class Ecommerce_app:
         limpiar_pantalla()
         print("Recuperar contraseña:")
         email = input("Ingrese su email: ")
-        datos_usuario = self.db.datos_login(email)
+        datos_usuario = self.db.get_datos_login(email)
         if datos_usuario:
             print(decodebytes(datos_usuario[0].encode()))
         else:
@@ -146,6 +145,7 @@ class Ecommerce_app:
 
         while self.usuario:
             limpiar_pantalla()
+            print(self.usuario.ficha_usuario())
             print("""Menu Usuario
 [1] Configuracion perfil
 [2] Ver catálogo
@@ -169,7 +169,8 @@ class Ecommerce_app:
 
         while self.usuario:
             limpiar_pantalla()
-            print("""Perfil:
+            print(self.usuario.ficha_usuario())
+            print("""Menu:
 [1]Modificar nombre
 [2]Modificar apellido
 [3]Modificar email
@@ -235,7 +236,7 @@ class Ecommerce_app:
         while not validate_email(email, check_mx=True):
             print("Ese mail no es correcto...")
             email = input("Nuevo email:")
-        if not self.db.datos_login(email):
+        if not self.db.get_datos_login(email):
             if self.consiente_cambio():
                 self.usuario.set_email(email)
                 self.db.actualizar_usuario_email(self.usuario)
@@ -290,7 +291,7 @@ class Ecommerce_app:
 
 
     def modificar_direccion(self):
-        '''Modificar predeterminada direccion del usuario'''
+        '''Modificar direccion predeterminada del usuario'''
 
 
 
@@ -311,7 +312,7 @@ class Ecommerce_app:
     def menu_catalogo(self):
         '''Permite filtrar y elegir los productos en catalogo'''
 
-        self.lista_de_productos = [Producto(*datos) for datos in self.db.todos_los_productos()]
+        self.lista_de_productos = [Producto(*datos) for datos in self.db.get_todos_los_productos()]
         while self.lista_de_productos:
             limpiar_pantalla()
             print("""Catálogo:
@@ -323,6 +324,7 @@ class Ecommerce_app:
             rta = input("-> ")
             if rta == "1":
                 self.listar_productos()
+                self.seleccionar_producto()
             if rta == "2":
                 self.buscar_productos_por_nombre()
             if rta == "3":
@@ -334,6 +336,27 @@ class Ecommerce_app:
 
     def listar_productos(self):
         '''Muestra los productos en pantalla'''
+
+        limpiar_pantalla()
+        print("Lista de productos:")
+        for producto in self.lista_de_productos:
+            print(producto)
+
+
+
+    def seleccionar_producto(self):
+        '''Selecciona un producto según su id'''
+
+        print("Ingrese nº de producto:")
+        producto_id = input("-> ")
+        datos_producto = self.db.get_producto_segun_id(producto_id)
+        if datos_producto:
+            self.producto = Producto(*datos_producto)
+            print(self.producto.ficha_producto())
+        else:
+            self.producto = None
+            print("No se pudo seleccionar un producto")
+        input()
 
 
 
@@ -400,7 +423,8 @@ class Ecommerce_app:
 
 
 
-
-app = Ecommerce_app(dbconf)
-# ~ app.menu_inicio()
-app.menu_catalogo()
+if __name__ == "__main__":
+    from dbconf import dbconf
+    app = Ecommerce_app(dbconf)
+    # ~ app.menu_inicio()
+    app.menu_catalogo()

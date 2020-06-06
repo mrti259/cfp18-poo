@@ -7,29 +7,28 @@
 
 
 **Modulos:**
-- [x] AGREGAR REGISTRO DIRECCIONES! < IMPORTANTE
-- [x] Añadir producto
-- [x] Modificar datos producto
-- [x] Añadir a carrito
-- [ ] Modificar carrito
-- [ ] Registro compra > Afecta stock de productos
+- [ ] Formulario usuario
+- [ ] Formulario producto
+- [ ] Formulario direccion
 - [ ] validaciones ?
-- [x] Errores en clases < complicó el código, tal vez lo saquemos
 
 **Ecomerce_app:**
 - [x] Login
 - [x] Alta usuario
 - [x] Baja usuario
-- [ ] Modificacion usuario
+- [x] Modificacion usuario
 - [ ] Alta productos
 - [ ] Baja productos
 - [ ] Modificacion productos
+- [ ] Alta direccion
+- [ ] Baja direccion
+- [ ] Modificacion direccion
+- [ ] Alta carrito
+- [ ] Baja carrito
+- [ ] Modificacion carrito
+- [ ] Registro compras
 
 **Agregar:**
 - [x] validate_email (necesita py3dns)
 - [x] getpass
 - [ ] flask
-
-**Hay q estructurar el programa:**
-- [x] Guardar modulos en una carpeta común
-- [ ] Programa principal en carpeta principal (main.py)

@@ -1,5 +1,6 @@
 class Producto:
     def __init__(self, producto_id, nombre, descripcion, precio, stock, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion):
+        '''Inicializa un producto con sus datos'''
         self.set_producto_id(producto_id)
         self.set_nombre(nombre)
         self.set_descripcion(descripcion)
@@ -11,7 +12,21 @@ class Producto:
         self.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
 
     def __str__(self):
+        '''Da formato al objeto para ser pasado como cadena'''
         return (f"{self.get_producto_id()}. {self.get_nombre()} ({self.get_precio()})")
+
+    def ficha_producto(self):
+        '''Da formato al objeto para pasarlo como una ficha más informativa'''
+        return (f"""Producto:
+Nombre: {self.get_nombre()}
+Descripcion: {self.get_descripcion()}
+Precio: {self.get_precio()}
+Stock: {self.get_stock()}
+Categoria: {self.get_categoria_id()}
+Marca: {self.get_marca_id()}
+Fecha de publicacion: {self.get_fecha_de_publicacion()}
+Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
+""")
 
     def set_producto_id(self, producto_id):
         self.producto_id = producto_id

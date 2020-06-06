@@ -1,17 +1,33 @@
 class Usuario:
     def __init__(self, usuario_id, dni, nombre, apellido, fecha_de_nacimiento, email, clave, telefono, direccion_id, fecha_de_registro):
+        '''Inicializa un usuario con sus datos'''
         self.set_usuario_id(usuario_id)
-        self.set_dni(dni)
+        self.set_email(email)
+        self.set_clave(clave)
         self.set_nombre(nombre)
         self.set_apellido(apellido)
         self.set_fecha_de_nacimiento(fecha_de_nacimiento)
-        self.set_email(email)
-        self.set_clave(clave)
+        self.set_dni(dni)
         self.set_telefono(telefono)
         self.set_direccion_id(direccion_id)
         self.set_fecha_de_registro(fecha_de_registro)
         self.compras = []
         self.carrito = []
+
+    def __str__(self):
+        '''Da formato a un usuario para ser pasado como cadena'''
+        return (f"{self.get_usuario_id()}. {self.get_email()}")
+
+    def ficha_usuario(self):
+        '''Da formato a un usuario para pasarlo como una ficha más informativa'''
+        return (f"""Usuario:
+Nombre y apellido: {self.get_nombre()} {self.get_apellido()}
+Email: {self.get_email()}
+DNI: {self.get_dni()}
+Telefono: {self.get_telefono()}
+Fecha de nacimiento: {self.get_fecha_de_nacimiento()}
+Fecha de registro: {self.get_fecha_de_registro()}
+""")
 
     def set_usuario_id(self, usuario_id):
         self.usuario_id = usuario_id
