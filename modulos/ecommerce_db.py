@@ -203,7 +203,7 @@ class Ecommerce_db:
             for compra in usuario.get_compras():
                 compra.set_usuario_id(-1)
                 self.actualizar_compra_usuario_id(compra)
-        val = (usuario.get_id(),)
+        val = (usuario.get_usuario_id(),)
         self.cursor.execute(queries["delete_usuario"], val)
         self.conexion.commit()
 
@@ -223,12 +223,12 @@ class Ecommerce_db:
         self.conexion.commit()
 
     def actualizar_usuario_nombre(self, usuario):
-        val = (usuario.get_direccion_id(), usuario.get_usuario_id())
+        val = (usuario.get_nombre(), usuario.get_usuario_id())
         self.cursor.execute(queries["update_usuario_nombre"], val)
         self.conexion.commit()
 
     def actualizar_usuario_apellido(self, usuario):
-        val = (usuario.get_direccion_id(), usuario.get_usuario_id())
+        val = (usuario.get_apellido(), usuario.get_usuario_id())
         self.cursor.execute(queries["update_usuario_apellido"], val)
         self.conexion.commit()
 
@@ -268,7 +268,7 @@ class Ecommerce_db:
         self.conexion.commit()
 
     def actualizar_direccion_calle_y_altura(self, direccion):
-        val = (direccion.get_calle(), direccion.get_altura(), direccion.get_id())
+        val = (direccion.get_calle(), direccion.get_altura(), direccion.get_direccion_id())
         self.cursor.execute(queries["update_direccion_calle_y_altura"], val)
         self.conexion.commit()
 

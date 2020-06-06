@@ -10,7 +10,7 @@ class Usuario:
         self.set_telefono(telefono)
         self.set_direccion_id(direccion_id)
         self.set_fecha_de_registro(fecha_de_registro)
-        self.compra = []
+        self.compras = []
         self.carrito = []
 
     def set_usuario_id(self, usuario_id):
@@ -46,7 +46,7 @@ class Usuario:
     def set_clave(self, clave):
         self.clave = clave
     def get_clave(self):
-        return encriptar(self.clave)
+        return self.clave
 
     def set_telefono(self, telefono):
         self.telefono = telefono
@@ -64,9 +64,9 @@ class Usuario:
         return self.fecha_de_registro
 
     def cargar_compras(self, lista_compras):
-        self.carrito.concat(lista_compras)
-    def get_carrito(self):
-        return self.carrito
+        self.compras.concat(lista_compras)
+    def get_compras(self):
+        return self.compras
 
     def cargar_carrito(self, lista_carrito):
         self.carrito.concat(lista_carrito)

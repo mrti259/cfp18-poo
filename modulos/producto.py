@@ -10,6 +10,9 @@ class Producto:
         self.set_fecha_de_publicacion(fecha_de_publicacion)
         self.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
 
+    def __str__(self):
+        return (f"{self.get_producto_id()}. {self.get_nombre()} ({self.get_precio()})")
+
     def set_producto_id(self, producto_id):
         self.producto_id = producto_id
     def get_producto_id(self):
