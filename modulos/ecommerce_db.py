@@ -292,7 +292,7 @@ class Ecommerce_db:
 if __name__=="__main__":
     from dbconf import dbconf
     db = Ecommerce_db(dbconf)
-    lista_usuarios=db.todos_los_usuarios()
-    lista_productos=db.todos_los_productos()
+    lista_usuarios=db.get_todos_los_usuarios()
+    lista_productos=db.get_todos_los_productos()
     print(lista_usuarios)
     print(lista_productos)
