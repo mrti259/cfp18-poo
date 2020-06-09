@@ -1,65 +1,84 @@
-import os
-import platform
-import datetime
-from validate_email import validate_email
-from base64 import encodebytes
+from datetime import date, datetime
+from .producto import Producto
+from .usuario import Usuario
+from .direccion import Direccion
+from .extras import limpiar_pantalla
 
-def validate_clave(clave):
-    return any(char.islower() for char in clave) and any(char.isupper() for char in clave) and any(char.isdigit() for char in clave)
+class Formulario:
+    '''Contiene distintos formularios para la creación de objetos'''
 
-def limpiar_pantalla():
-    if platform.system() == "Windows":
-        clear = "cls"
-    else:
-        clear = "clear"
-    os.system(clear)
+    def __init__(self):
+        self.ahora = datetime.now
+        self.hoy = date.today
 
 
 
-def formulario_registro():
-    def mostrar_datos(datos):
-        for k,v in datos.items():
-            print(k+":", v)
+    def listar_opciones(self, opciones):
+        '''Despliega las opciones disponibles para un campo'''
 
-    datos = {
-        "Nombres":"",
-        "Apellidos":"",
-        "Email":"",
-        "Clave":"",
-        "Dni":"",
-        "Telefono":"",
-        "Fecha de nacimiento (dd/mm/aaaa)":"",
+        for o in opciones:
+            print(o)
+
+
+
+    def nuevo_producto(self, marcas, categorias):
+        '''Formulario que se mostrara cuando se desee crear un nuevo producto'''
+
+        producto = Producto(fecha_de_publicacion=self.ahora(), fecha_de_ultima_modificacion=self.ahora())
+        modificadores = {
+            "Nombre": producto.set_nombre,
+            "Descripcion": producto.set_descripcion,
+            "Precio": producto.set_precio,
+            "Stock": producto.set_stock,
+            "Marca_id": producto.set_marca_id,
+            "Categoria_id": producto.set_categoria_id,
         }
+        i = len(modificadores)
+        for campo, setter in modificadores.items():
+            limpiar_pantalla()
+            print(producto.ficha_producto())
+            if campo == "Marca_id":
+                self.listar_opciones(marcas)
+            elif campo == "Categoria_id":
+                self.listar_opciones(categorias)
+            dato = input(campo + ": ")
+            while not setter(dato):
+                print("No es un dato válido!")
+                dato = input(campo)
+        return producto
 
-    errores = {}
 
-    for k in datos:
-        limpiar_pantalla()
-        mostrar_datos(datos)
-        datos[k] = input("-> " + k + ": ")
-        if not datos[k]:
-            errores[k] = "No puede dejar un casillero vacío"
 
-    nombre, apellido, email, clave, dni, telefono, fecha_de_nacimiento = tuple([val for val in datos.values()])
+    def nuevo_usuario(self):
+        '''Formulario que se mostrara cuando se desee crear un nuevo usuario'''
 
-    if not dni.isdigit():
-        errores["Dni"] = "El DNI no es válido"
-    if not telefono.isdigit():
-        errores["Telefono"] = "El telefono no es válido"
-    if not validate_email(email, check_mx=True):
-        errores["Email"] = "No es un email válido"
-    if not validate_clave(clave):
-        errores["Clave"] = "La contraseña no es segura"
-    try:
-        fecha_de_nacimiento = datetime.datetime.strptime(fecha_de_nacimiento, "%d/%m/%Y")
-    except:
-        errores["Fecha de nacimiento"] = "La fecha no es válida"
+        usuario = Usuario()
+        modificadores = {
+            "Email": usuario.set_email,
+            "Clave": usuario.set_clave,
+            "Nombre": usuario.set_nombre,
+            "Apellido": usuario.set_apellido,
+            "(dd/mm/aaaa)": usuario.set_fecha_de_nacimiento,
+            "DNI": usuario.set_dni,
+            "Telefono": usuario.set_telefono,
+            "Direccion": usuario.set_direccion_id,
+        }
+        i = len(modificadores)
+        for campo, setter in modificadores.items():
+            limpiar_pantalla()
+            print(usuario.ficha_usuario())
+            if campo == "(dd/mm/aaaa)":
+                print("Fecha de nacimiento", end=" ")
+            elif campo == "Direccion":
+                self.registrar_direccion()
+            dato = input(campo + ": ")
+            while not setter(dato):
+                print("No es un dato válido!")
+                dato = input(campo)
+        return usuario
 
-    if errores:
-        for err in errores.values():
-            print(err)
-        input()
-        return formulario_registro()
-    else:
-        return int(dni), nombre.capitalize(), apellido.capitalize(), fecha_de_nacimiento, email, encodebytes(clave.encode()), int(telefono)
 
+
+    def nueva_direccion(self):
+        '''Formulario que se mostrara cuando se desee registrar una nueva direccion'''
+        direccion = Direccion()

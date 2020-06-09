@@ -1,21 +1,14 @@
-import os
-import platform
 import datetime
 from getpass import getpass
 from base64 import encodebytes, decodebytes
-from validate_email import validate_email
-from ecommerce_db import Ecommerce_db
-from producto import Producto
-from usuario import Usuario
-from formulario import formulario_registro
+from .ecommerce_db import Ecommerce_db
+from .producto import Producto
+from .usuario import Usuario
+from .validador import Validador
+from .formulario import Formulario
+from .extras import limpiar_pantalla, encriptar
 
-def limpiar_pantalla():
-    '''Simplemente limpia la pantalla'''
-    if platform.system() == "Windows":
-        clear = "cls"
-    else:
-        clear = "clear"
-    os.system(clear)
+
 
 class Ecommerce_app:
 
@@ -24,6 +17,11 @@ class Ecommerce_app:
         self.db = Ecommerce_db(dbconf)
         self.usuario = None
         self.producto = None
+        self.productos = self.db.get_todos_los_productos()
+        self.marcas = self.db.get_todas_las_marcas()
+        self.categorias = self.db.get_todas_las_categorias()
+        self.validador = Validador()
+        self.formulario = Formulario()
 
 
 
@@ -31,15 +29,8 @@ class Ecommerce_app:
         '''Pide al usuario que ingrese una cadena y la devuelve encriptada'''
 
         clave = getpass(texto)
-        return encodebytes(clave.encode())
+        return encriptar(clave)
 
-    def consiente_cambio(self):
-        '''Muestra un mensaje de confirmacion'''
-
-        rta = input("Quiere consentir el cambio? (s/n) ")
-        while not (rta == "s" or rta == "n"):
-            rta = input("Para confirmar ingrese s o n: ")
-        return rta == "s"
 
 
     def menu_inicio(self):
@@ -79,7 +70,7 @@ class Ecommerce_app:
         clave = self.ingresar_clave("Contraseña: ")
         if email == "@admin" and clave == encodebytes("123".encode()):
             self.menu_abm_producto()
-        elif validate_email(email, check_mx=True) and clave:
+        elif self.validador.email_es_valido(email) and clave:
             self.comprobar_login(email, clave)
         elif email:
             print("No es un email válido.")
@@ -96,7 +87,7 @@ class Ecommerce_app:
 
         datos_db = self.db.get_datos_login(email)
         if datos_db:
-            if clave == datos_db[0].encode():
+            if self.validador.clave_es_correcta(clave, datos_db[0]):
                 datos_usuario = self.db.get_usuario_segun_id(datos_db[1])
                 self.usuario = Usuario(*datos_usuario)
                 print("Inicio de sesión exitoso")
@@ -112,14 +103,14 @@ class Ecommerce_app:
 
         Muestra en pantalla los datos que tiene que completar el usuario para registrarse'''
 
-        limpiar_pantalla()
-        usuario = Usuario(0, *formulario_registro(), 0, datetime.datetime.now())
+        usuario = self.formulario.nuevo_usuario()
         datos_login = self.db.get_datos_login(usuario.get_email())
         if datos_login:
-            print("Ese email ya se encuentra registrado")
+            print("Ese email ya se encuentra registrado!")
         else:
             self.db.registrar_usuario(usuario)
             print("Usuario registrado!")
+        input()
 
 
 
@@ -165,7 +156,9 @@ class Ecommerce_app:
 
 
     def menu_perfil(self):
-        '''ABM usuario'''
+        '''Menu de configuracion de perfil
+
+        Permite al usuario acceder a distintas funciones para modificar sus datos o eliminar su cuenta'''
 
         while self.usuario:
             limpiar_pantalla()
@@ -312,8 +305,7 @@ class Ecommerce_app:
     def menu_catalogo(self):
         '''Permite filtrar y elegir los productos en catalogo'''
 
-        self.lista_de_productos = [Producto(*datos) for datos in self.db.get_todos_los_productos()]
-        while self.lista_de_productos:
+        while True:
             limpiar_pantalla()
             print("""Catálogo:
 [1] Ver todo
@@ -339,7 +331,7 @@ class Ecommerce_app:
 
         limpiar_pantalla()
         print("Lista de productos:")
-        for producto in self.lista_de_productos:
+        for producto in self.productos:
             print(producto)
 
 
@@ -409,22 +401,43 @@ class Ecommerce_app:
             rta = input("-> ")
             if rta == "x":
                 return
-            # ~ elif rta == "1":
-                # ~ self.registrar_producto()
-            # ~ elif rta == "4":
-                # ~ self.listar_productos()
-            # ~ else:
-                # ~ producto = self.buscar_producto_por_nombre()
-                # ~ if producto:
-                    # ~ if rta == "3":
-                        # ~ self.eliminar_producto(producto)
-                    # ~ if opc=="2":
-                        # ~ self.menu_modificar_producto(producto)
+            elif rta == "1":
+                self.registrar_producto()
+            elif rta == "4":
+                self.listar_productos()
+            else:
+                producto = self.buscar_producto_por_nombre()
+                if producto:
+                    if rta == "3":
+                        self.eliminar_producto(producto)
+                    if opc=="2":
+                        self.menu_modificar_producto(producto)
+
+    def registrar_producto(self):
+        '''Registro de producto
+
+        Llama al formulario, crea un producto y lo registra en la base de datos.'''
+
+        producto = self.formulario.nuevo_producto(self.marcas, self.categorias)
+        self.db.registrar_producto(producto)
+        print("Producto registrado")
+        input()
 
 
 
-if __name__ == "__main__":
-    from dbconf import dbconf
-    app = Ecommerce_app(dbconf)
-    # ~ app.menu_inicio()
-    app.menu_catalogo()
+
+    def eliminar_producto(self):
+        '''Elimina un producto de la aplicación y de la base de datos.'''
+
+
+
+
+
+
+    def menu_modificar_producto(self):
+        '''Permite acceder a las funciones para modificar los datos de un producto'''
+
+
+
+
+
