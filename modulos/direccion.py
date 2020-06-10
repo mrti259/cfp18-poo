@@ -63,5 +63,5 @@ Ciudad: {self.ciudad}
     def get_ciudad_id(self):
         return self.ciudad
 
-dir1 = Direccion(2,"drago", 1196, 1755, 1)
-print(Direccion.ficha_direccion(dir1))
+# dir1 = Direccion(2,"drago", 1196, 1755, 1)
+# print(Direccion.ficha_direccion(dir1))
