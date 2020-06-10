@@ -1,9 +1,10 @@
-from .validador import Validador
+import .validador
 
 class Producto:
+
     def __init__(self, producto_id=0, nombre=" ", descripcion=" ", precio=0, stock=0, categoria_id=0, marca_id=0, fecha_de_publicacion="", fecha_de_ultima_modificacion=""):
         '''Inicializa un producto con sus datos'''
-        self.validador = Validador()
+
         self.set_producto_id(producto_id)
         self.set_nombre(nombre)
         self.set_descripcion(descripcion)
@@ -15,13 +16,17 @@ class Producto:
         self.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
 
 
+
     def __str__(self):
         '''Da formato al objeto para ser pasado como cadena'''
+
         return (f"{self.get_producto_id()}. {self.get_nombre()} ({self.get_precio()})")
+
 
 
     def ficha_producto(self):
         '''Da formato al objeto para pasarlo como una ficha más informativa'''
+
         return (f"""\
 Producto:
 =========
@@ -36,6 +41,7 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
 """)
 
 
+
     def set_producto_id(self, producto_id):
         self.producto_id = producto_id
         return 1
@@ -45,9 +51,10 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
 
 
     def set_nombre(self, nombre):
-        if self.validador.nombre_es_valido(nombre):
+        if validador.valida_nombre(nombre):
             self.nombre = nombre.title()
             return 1
+        print("El nombre no es válido")
 
     def get_nombre(self):
         return self.nombre
@@ -62,9 +69,10 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
 
 
     def set_stock(self, stock):
-        if self.validador.stock_es_valido(stock):
+        if validador.valida_stock(stock):
             self.stock = stock
             return 1
+        print("El stock no es válido")
 
     def incr_stock(self, incr):
         self.stock += incr
@@ -95,9 +103,10 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
 
 
     def set_precio(self, precio):
-        if self.validador.precio_es_valido(precio):
+        if validador.valida_precio(precio):
             self.precio = precio
             return 1
+        print("El precio no es válido")
 
     def get_precio(self):
         return self.precio
@@ -106,7 +115,6 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
     def set_fecha_de_publicacion(self, fecha_de_publicacion):
         self.fecha_de_publicacion = fecha_de_publicacion
         return 1
-
     def get_fecha_de_publicacion(self):
         return self.fecha_de_publicacion
 
@@ -114,6 +122,5 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
     def set_fecha_de_ultima_modificacion(self, fecha_de_ultima_modificacion):
         self.fecha_de_ultima_modificacion = fecha_de_ultima_modificacion
         return 1
-
     def get_fecha_de_ultima_modificacion(self):
         return self.fecha_de_ultima_modificacion

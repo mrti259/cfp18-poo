@@ -1,7 +1,10 @@
 from .ecommerce_app import Ecommerce_app
 from .ecommerce_db import Ecommerce_db
 from .producto import Producto
+from .marca import Marca
+from .categoria import Categoria
+from .carrito import Carrito
 from .usuario import Usuario
-from .validador import Validador
 from .formulario import Formulario
-from .extras import limpiar_pantalla
+import .extras
+import .validador

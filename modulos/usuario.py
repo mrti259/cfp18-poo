@@ -1,9 +1,10 @@
+import .validador
+
 class Usuario:
 
     def __init__(self, usuario_id=0, dni=0, nombre="", apellido="", fecha_de_nacimiento="", email=" ", clave=" ", telefono=0, direccion_id=0, fecha_de_registro=""):
         '''Inicializa un usuario con sus datos'''
 
-        self.validador = Validador()
         self.set_usuario_id(usuario_id)
         self.set_email(email)
         self.set_clave(clave)
@@ -17,16 +18,21 @@ class Usuario:
         self.compras = []
         self.carrito = []
 
+
+
     def __str__(self):
         '''Da formato a un usuario para ser pasado como cadena'''
 
         return (f"{self.get_usuario_id()}. {self.get_email()}")
 
 
+
     def ficha_usuario(self):
         '''Da formato a un usuario para pasarlo como una ficha más informativa'''
 
-        return (f"""Usuario:
+        return (f"""\
+Usuario:
+========
 Nombre y apellido: {self.get_nombre()} {self.get_apellido()}
 Email: {self.get_email()}
 DNI: {self.get_dni()}
@@ -34,6 +40,7 @@ Telefono: {self.get_telefono()}
 Fecha de nacimiento: {self.get_fecha_de_nacimiento()}
 Fecha de registro: {self.get_fecha_de_registro()}
 """)
+
 
 
     def set_usuario_id(self, usuario_id):
@@ -68,9 +75,10 @@ Fecha de registro: {self.get_fecha_de_registro()}
 
 
     def set_fecha_de_nacimiento(self, fecha_de_nacimiento):
-        if self.validador.fecha_es_valida(fecha_de_nacimiento):
+        if validador.valida_fecha(fecha_de_nacimiento):
             self.fecha_de_nacimiento = fecha_de_nacimiento
             return 1
+        print("La fecha no es válida")
 
     def get_fecha_de_nacimiento(self):
         return self.fecha_de_nacimiento

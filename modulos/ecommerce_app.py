@@ -1,12 +1,14 @@
-import datetime
+# import datetime
 from getpass import getpass
-from base64 import encodebytes, decodebytes
 from .ecommerce_db import Ecommerce_db
 from .producto import Producto
+from .marca import Marca
+from .categoria import Categoria
+from .carrito import Carrito
 from .usuario import Usuario
-from .validador import Validador
 from .formulario import Formulario
-from .extras import limpiar_pantalla, encriptar
+import .extras
+import .validador
 
 
 
@@ -17,11 +19,21 @@ class Ecommerce_app:
         self.db = Ecommerce_db(dbconf)
         self.usuario = None
         self.producto = None
-        self.productos = self.db.get_todos_los_productos()
-        self.marcas = self.db.get_todas_las_marcas()
-        self.categorias = self.db.get_todas_las_categorias()
-        self.validador = Validador()
+        self.productos = []
+        self.marcas = []
+        self.categorias = []
         self.formulario = Formulario()
+
+
+
+    def actualizar_catalogo(self):
+        '''Vuelve a cargar los datos de productos, marcas y categorias'''
+         datos_productos = self.db.get_todos_los_productos()
+         self.productos = [Producto(*datos) for datos in datos_productos]
+         datos_marcas = self.db.get_todas_las_marcas()
+         self.marcas = [Marca(*datos) for datos in datos_marcas]
+         datos_categorias = self.db.get_todas_las_categorias()
+         self.categorias = [Categoria(*datos) for datos in datos_categorias]
 
 
 
@@ -29,7 +41,7 @@ class Ecommerce_app:
         '''Pide al usuario que ingrese una cadena y la devuelve encriptada'''
 
         clave = getpass(texto)
-        return encriptar(clave)
+        return extras.clave_encriptada(clave)
 
 
 
@@ -41,7 +53,7 @@ class Ecommerce_app:
         de registrar un nuevo usuario.'''
 
         while True:
-            limpiar_pantalla()
+            extras.limpiar_pantalla()
             print("""Menu de inicio
 [1] Iniciar sesión
 [2] Registrarse
@@ -64,13 +76,13 @@ class Ecommerce_app:
     def iniciar_sesion(self):
         '''Pide email y clave. El administrador puede acceder al ABM de producto. Un usuario inicia sesion.'''
 
-        limpiar_pantalla()
+        extras.limpiar_pantalla()
         print("Iniciar sesión: ")
         email = input("Email: ")
         clave = self.ingresar_clave("Contraseña: ")
-        if email == "@admin" and clave == encodebytes("123".encode()):
+        if email == "@admin" and clave == clave_encriptada("123")):
             self.menu_abm_producto()
-        elif self.validador.email_es_valido(email) and clave:
+        elif validador.valida_email(email) and clave:
             self.comprobar_login(email, clave)
         elif email:
             print("No es un email válido.")
@@ -87,7 +99,7 @@ class Ecommerce_app:
 
         datos_db = self.db.get_datos_login(email)
         if datos_db:
-            if self.validador.clave_es_correcta(clave, datos_db[0]):
+            if validador.valida_clave_correcta(clave, datos_db[0]):
                 datos_usuario = self.db.get_usuario_segun_id(datos_db[1])
                 self.usuario = Usuario(*datos_usuario)
                 print("Inicio de sesión exitoso")
@@ -117,12 +129,12 @@ class Ecommerce_app:
     def recuperar_contrasenia(self):
         '''Imprime un mensaje'''
 
-        limpiar_pantalla()
+        extras.limpiar_pantalla()
         print("Recuperar contraseña:")
         email = input("Ingrese su email: ")
         datos_usuario = self.db.get_datos_login(email)
         if datos_usuario:
-            print(decodebytes(datos_usuario[0].encode()))
+            print(clave_desencriptada(datos_usuario[0]))
         else:
             print("No se encuentra ese email")
         input()
@@ -135,7 +147,7 @@ class Ecommerce_app:
         Permite al usuario modificar acceder a otras funciones relacionadas a su perfil'''
 
         while self.usuario:
-            limpiar_pantalla()
+            extras.limpiar_pantalla()
             print(self.usuario.ficha_usuario())
             print("""Menu Usuario
 [1] Configuracion perfil
@@ -161,7 +173,7 @@ class Ecommerce_app:
         Permite al usuario acceder a distintas funciones para modificar sus datos o eliminar su cuenta'''
 
         while self.usuario:
-            limpiar_pantalla()
+            extras.limpiar_pantalla()
             print(self.usuario.ficha_usuario())
             print("""Menu:
 [1]Modificar nombre
@@ -195,7 +207,7 @@ class Ecommerce_app:
     def modificar_nombre(self):
         '''Modificar nombre del usuario'''
 
-        limpiar_pantalla()
+        extras.limpiar_pantalla()
         nombre = input("Nuevo nombre: ")
         if self.consiente_cambio():
             self.usuario.set_nombre(nombre)
@@ -210,7 +222,7 @@ class Ecommerce_app:
     def modificar_apellido(self):
         '''Modificar apellido del usuario'''
 
-        limpiar_pantalla()
+        extras.limpiar_pantalla()
         apellido = input("Nuevo apellido: ")
         if self.consiente_cambio():
             self.usuario.set_apellido(apellido)
@@ -224,9 +236,9 @@ class Ecommerce_app:
     def modificar_email(self):
         '''Modificar email del usuario'''
 
-        limpiar_pantalla()
+        extras.limpiar_pantalla()
         email = input("Nuevo email: ")
-        while not validate_email(email, check_mx=True):
+        while not validador.valida_email(email):
             print("Ese mail no es correcto...")
             email = input("Nuevo email:")
         if not self.db.get_datos_login(email):
@@ -245,7 +257,7 @@ class Ecommerce_app:
     def modificar_clave(self, recuperar = False):
         '''Modificar clave del usuario'''
 
-        limpiar_pantalla()
+        etras.limpiar_pantalla()
         clave0 = self.ingresar_clave("Nueva clave: ")
         clave1 = self.ingresar_clave("Repita la clave:")
         if clave0 == clave1:
@@ -270,7 +282,7 @@ class Ecommerce_app:
     def modificar_telefono(self):
         '''Modificar telefono del usuario'''
 
-        limpiar_pantalla()
+        extras.limpiar_pantalla()
         telefono = input("Nuevo telefono: ")
         if telefono.isdigit():
             if self.consiente_cambio():
@@ -329,7 +341,7 @@ class Ecommerce_app:
     def listar_productos(self):
         '''Muestra los productos en pantalla'''
 
-        limpiar_pantalla()
+        extras.limpiar_pantalla()
         print("Lista de productos:")
         for producto in self.productos:
             print(producto)
@@ -371,7 +383,7 @@ class Ecommerce_app:
         '''Ver los productos que se encuentran en carritos'''
 
         while self.usuario:
-            limpiar_pantalla()
+            extras.limpiar_pantalla()
             input()
             return
 
@@ -381,7 +393,7 @@ class Ecommerce_app:
         '''Ve las compras realizadas por el usuario'''
 
         while self.usuario:
-            limpiar_pantalla()
+            extras.limpiar_pantalla()
             input()
             return
 
@@ -391,7 +403,7 @@ class Ecommerce_app:
         '''Menu de Alta Baja Modificacion de Productos'''
 
         while True:
-            limpiar_pantalla()
+            extras.limpiar_pantalla()
             print(""""Que accion desea realizar:
 [1] Agregar producto
 [2] Modificar producto
@@ -436,8 +448,3 @@ class Ecommerce_app:
 
     def menu_modificar_producto(self):
         '''Permite acceder a las funciones para modificar los datos de un producto'''
-
-
-
-
-
