@@ -6,5 +6,5 @@ from .categoria import Categoria
 from .carrito import Carrito
 from .usuario import Usuario
 from .formulario import Formulario
-import .extras
-import .validador
+import modulos.extras
+import modulos.validador

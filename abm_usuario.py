@@ -1,4 +1,4 @@
-from todos_los_modulos import Ecommerce_db, dbconf, Usuario, encriptar, validate_email, getpass
+import Ecommerce_db, dbconf, Usuario, encriptar, validate_email, getpass
 
 db = Ecommerce_db
 

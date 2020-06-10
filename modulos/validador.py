@@ -15,7 +15,7 @@ def valida_id(self, ID):
     return str(ID).isdigit()
 
 def valida_clave_segura(self, clave):
-    return any(char.islower() for char in clave) and any(char.isupper() for char in clave) and any(char.isdigit() for char in clave)
+    return len(clave) >= 8 and any(char.islower() for char in clave) and any(char.isupper() for char in clave) and any(char.isdigit() for char in clave)
 
 def valida_email(self, email):
     return validate_email(email, check_mx=True)
@@ -28,11 +28,9 @@ def valida_dni(self, dni):
 
 def valida_fecha(self, fecha):
     try:
-        return (extras.string_a_fecha(fecha))
+        return extras.string_a_fecha(fecha)
     except:
-        if str(type(fecha)) == "<class 'datetime.date'>":
-            return True
-        
+        return str(type(fecha)) == "<class 'datetime.date'>":
 
 def valida_clave_correcta(self, clave1, clave2):
     return clave1 == clave2

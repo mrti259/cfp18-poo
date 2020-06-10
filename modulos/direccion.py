@@ -1,29 +1,29 @@
-from Ecommerce_db import get_ciudad_segun_id
 class Direccion:
-    def __init__(self, direccion_id, calle, altura, codigo_postal, ciudad_id):
-        self.set_direccion_id(direcion_id)
+    def __init__(self, direccion_id=0, calle="", altura=0, codigo_postal="", ciudad_id=0):
+        '''Se inicializa con datos válidos. Despues se settea un objeto ciudad'''
+        self.set_direccion_id(direccion_id)
         self.set_calle(calle)
         self.set_altura(altura)
         self.set_codigo_postal(codigo_postal)
         self.set_ciudad_id(ciudad_id)
+        self.ciudad = None
 
     def __str__(self):
         '''Da formato a una direccion para ser pasado como cadena'''
 
-        return (f"{self.get_calle()}. {self.get_altura()}")
+        return (f"{self.get_calle()} {self.get_altura()} {self.codigo_postal()}")
 
 
     def ficha_direccion(self):
         '''Da formato a una direccion para pasarlo como una ficha más informativa'''
 
         return (f"""\
-direccion:
-========
+Direccion:
+==========
 Calle y altura: {self.get_calle()} {self.get_altura()}
 Codigo Postal: {self.get_codigo_postal()}
-Ciudad: {get_ciudad_segun_id(self.get_ciudad_id())}
+Ciudad: {self.ciudad}
 """)
-#fijarse si el get_ciudad_segun_id anda bien porque el select devuelve mas de un valor
 
 
 
@@ -56,3 +56,12 @@ Ciudad: {get_ciudad_segun_id(self.get_ciudad_id())}
         return 1
     def get_ciudad_id(self):
         return self.ciudad_id
+
+    def set_ciudad(self, ciudad):
+        self.ciudad = ciudad
+        return 1
+    def get_ciudad_id(self):
+        return self.ciudad
+
+dir1 = Direccion(2,"drago", 1196, 1755, 1)
+print(Direccion.ficha_direccion(dir1))

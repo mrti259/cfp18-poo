@@ -13,7 +13,7 @@ queries = {
     "select_provincia_id_segun_nombre_y_pais_id":"SELECT provincia_id FROM provincia WHERE nombre = %s AND pais_id %s",
     "select_ciudad_id_segun_nombre_y_provincia_id":"SELECT ciudad_id FROM ciudad WHERE nombre = %s AND provincia_id = %s",
     "select_direccion_segun_id":"SELECT * FROM direccion WHERE direccion_id = %s",
-    "select_ciudad_segun_id":"SELECT nombre, provincia_id FROM ciudad WHERE ciudad_id  = %s",
+    "select_ciudad_segun_id":"SELECT nombre FROM ciudad WHERE ciudad_id  = %s",
     "select_provincia_segun_id":"SELECT nombre, pais_id FROM provincia WHERE provincia_id = %s",
     "select_pais_segun_id":"SELECT nombre FROM pais WHERE pais_id = %s",
     "select_productos_segun_nombre":"SELECT * FROM producto WHERE nombre = %s",

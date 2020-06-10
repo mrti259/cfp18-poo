@@ -20,6 +20,14 @@ def clave_desencriptada(clave):
     '''Desencripta una clave'''
     return str(decodebytes(clave.encode()))
 
+def ingresar_clave(texto, check=False):
+        '''Pide al usuario que ingrese una cadena y la devuelve encriptada'''
+        clave = getpass(texto)
+        while check and not validador.valida_clave_segura(clave):
+            print("No es segura. La clave tiene que tener al menos 8 caracteres, entre ellos una mayuscula, una minuscula y un número")
+            clave = getpass(texto)
+        return extras.clave_encriptada(clave)
+
 def fecha_a_string(fecha):
     '''Convierte un objeto tipo date a una cadena'''
     return datetime.strftime(fecha, "%d/%m/%Y")

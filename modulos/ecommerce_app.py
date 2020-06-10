@@ -1,4 +1,3 @@
-# import datetime
 from getpass import getpass
 from .ecommerce_db import Ecommerce_db
 from .producto import Producto
@@ -7,8 +6,8 @@ from .categoria import Categoria
 from .carrito import Carrito
 from .usuario import Usuario
 from .formulario import Formulario
-import .extras
-import .validador
+import modulos.extras
+import modulos.validador
 
 
 
@@ -34,14 +33,6 @@ class Ecommerce_app:
          self.marcas = [Marca(*datos) for datos in datos_marcas]
          datos_categorias = self.db.get_todas_las_categorias()
          self.categorias = [Categoria(*datos) for datos in datos_categorias]
-
-
-
-    def ingresar_clave(self, texto):
-        '''Pide al usuario que ingrese una cadena y la devuelve encriptada'''
-
-        clave = getpass(texto)
-        return extras.clave_encriptada(clave)
 
 
 
@@ -79,7 +70,7 @@ class Ecommerce_app:
         extras.limpiar_pantalla()
         print("Iniciar sesión: ")
         email = input("Email: ")
-        clave = self.ingresar_clave("Contraseña: ")
+        clave = extras.ingresar_clave("Contraseña: ")
         if email == "@admin" and clave == clave_encriptada("123")):
             self.menu_abm_producto()
         elif validador.valida_email(email) and clave:
@@ -134,7 +125,7 @@ class Ecommerce_app:
         email = input("Ingrese su email: ")
         datos_usuario = self.db.get_datos_login(email)
         if datos_usuario:
-            print(clave_desencriptada(datos_usuario[0]))
+            print(extras.clave_desencriptada(datos_usuario[0]))
         else:
             print("No se encuentra ese email")
         input()
@@ -257,9 +248,9 @@ class Ecommerce_app:
     def modificar_clave(self, recuperar = False):
         '''Modificar clave del usuario'''
 
-        etras.limpiar_pantalla()
-        clave0 = self.ingresar_clave("Nueva clave: ")
-        clave1 = self.ingresar_clave("Repita la clave:")
+        extras.limpiar_pantalla()
+        clave0 = extras.ingresar_clave("Nueva clave: ", check=True)
+        clave1 = extras.ingresar_clave("Repita la clave:")
         if clave0 == clave1:
             if recuperar:
                 self.usuario.set_clave(clave0)
@@ -305,7 +296,7 @@ class Ecommerce_app:
     def eliminar_cuenta(self):
         '''Elimina usuario de la aplicacion y de la base de datos'''
 
-        limpiar_pantalla()
+        extras.limpiar_pantalla()
         print("¿Quiere eliminar su cuenta?")
         if input("Confirmar (s/n): ") == "s":
             if input("Esta acción no se puede deshacer (s/n): ") == 's':
@@ -318,7 +309,7 @@ class Ecommerce_app:
         '''Permite filtrar y elegir los productos en catalogo'''
 
         while True:
-            limpiar_pantalla()
+            extras.limpiar_pantalla()
             print("""Catálogo:
 [1] Ver todo
 [2] Buscar por nombre
@@ -399,7 +390,30 @@ class Ecommerce_app:
 
 
 
-    def menu_abm_producto(self):
+    def menu_administrador(self):
+        '''Menu de administrador
+
+        Permite acceder a menus de ABCM'''
+
+        while not self.usuario:
+            extras.limpiar_pantalla()
+            print("""Menu Administrador:
+[1] Producto
+[2] Marca
+[3] Categoria
+[4] Compra
+[5] Usuarios
+[x] Salir
+""")
+            rta = input("-> ")
+            if rta == "1":
+                self.menu_abcm_producto()
+            if rta == "x":
+                return
+
+
+
+    def menu_abcm_producto(self):
         '''Menu de Alta Baja Modificacion de Productos'''
 
         while True:
