@@ -1,10 +1,14 @@
+from .carrito import Carrito
+from .categoria import Categoria
+from .ciudad import Ciudad
+from .direccion import Direccion
 from .ecommerce_app import Ecommerce_app
 from .ecommerce_db import Ecommerce_db
-from .producto import Producto
-from .marca import Marca
-from .categoria import Categoria
-from .carrito import Carrito
-from .usuario import Usuario
+from .extras import *
 from .formulario import Formulario
-import modulos.extras
-import modulos.validador
+from .marca import Marca
+from .pais import Pais
+from .producto import Producto
+from .provincia import Provincia
+from .usuario import Usuario
+from .validador import *

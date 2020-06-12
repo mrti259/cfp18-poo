@@ -11,7 +11,7 @@ class Direccion:
     def __str__(self):
         '''Da formato a una direccion para ser pasado como cadena'''
 
-        return (f"{self.get_calle()} {self.get_altura()} {self.codigo_postal()}")
+        return (f"{self.get_calle()} {self.get_altura()} {self.get_codigo_postal()}")
 
 
     def ficha_direccion(self):
@@ -30,38 +30,51 @@ Ciudad: {self.ciudad}
     def set_direccion_id(self, direccion_id):
         self.direccion_id = direccion_id
         return 1
+
     def get_direccion_id(self):
         return self.direccion_id
+
+
 
     def set_calle(self, calle):
         self.calle = calle.title()
         return 1
+
     def get_calle(self):
         return self.calle
+
+
 
     def set_altura(self, altura):
         self.altura = altura
         return 1
+
     def get_altura(self):
         return self.altura
+
+
 
     def set_codigo_postal(self, codigo_postal):
         self.codigo_postal = codigo_postal
         return 1
+
     def get_codigo_postal(self):
         return self.codigo_postal
+
+
 
     def set_ciudad_id(self, ciudad_id):
         self.ciudad_id = ciudad_id
         return 1
+
     def get_ciudad_id(self):
         return self.ciudad_id
+
+
 
     def set_ciudad(self, ciudad):
         self.ciudad = ciudad
         return 1
+
     def get_ciudad_id(self):
         return self.ciudad
-
-# dir1 = Direccion(2,"drago", 1196, 1755, 1)
-# print(Direccion.ficha_direccion(dir1))

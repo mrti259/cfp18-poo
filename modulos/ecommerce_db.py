@@ -1,14 +1,19 @@
 import mysql.connector
 
 queries = {
-    "select_usuarios":"SELECT * FROM usuario",
-    "select_compras":"SELECT * FROM compra",
-    "select_productos":"SELECT * FROM producto",
+    "select_paises":"SELECT * FROM pais",
+    "select_provincias":"SELECT * FROM provincia",
+    "select_ciudad":"SELECT * FROM ciudad",
     "select_categorias":"SELECT * FROM categoria",
     "select_marcas":"SELECT * FROM marca",
+    "select_productos":"SELECT * FROM producto",
+    "select_usuarios":"SELECT * FROM usuario",
+    "select_compras":"SELECT * FROM compra",
+    "select_provincias_segun_pais":"SELECT * FROM provincia WHERE pais_id = %s",
+    "select_ciudades_segun_provincia":"SELECT * FROM ciudad WHERE provincia_id = %s",
+    "select_carrito_segun_usuario":"SELECT * FROM carrito WHERE usuario_id = %s",
     "select_login_segun_email":"SELECT clave, usuario_id FROM usuario WHERE email = %s",
     "select_usuario_segun_id":"SELECT * FROM usuario WHERE usuario_id = %s",
-    "select_carrito_segun_usuario":"SELECT * FROM carrito WHERE usuario_id = %s",
     "select_pais_id_segun_nombre":"SELECT pais_id FROM pais WHERE nombre = %s",
     "select_provincia_id_segun_nombre_y_pais_id":"SELECT provincia_id FROM provincia WHERE nombre = %s AND pais_id %s",
     "select_ciudad_id_segun_nombre_y_provincia_id":"SELECT ciudad_id FROM ciudad WHERE nombre = %s AND provincia_id = %s",
@@ -22,28 +27,32 @@ queries = {
     "select_categoria_id_segun_nombre":"SELECT categoria_id FROM categoria WHERE nombre = %s",
     "select_marca_id_segun_nombre":"SELECT marca_id FROM marca WHERE nombre = %s",
 
+    "update_direccion_calle_y_altura":"UPDATE direccion SET calle = %s, altura = %s WHERE direccion_id = %s",
+    "update_direccion_codigo_postal":"UPDATE direccion SET codigo_posta = %s WHERE direccion_id = %s",
     "update_producto_nombre":"UPDATE producto SET nombre = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_descripcion":"UPDATE producto SET descripcion = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
     "update_producto_precio":"UPDATE producto SET precio = %s, fecha_de_ultima_modificacion = %s WHERE producto_id = %s",
-    "update_usuario_nombre":"UPDATE usuario SET nombre = %s WHERE usuario_id = %s",
-    "update_usuario_apellido":"UPDATE usuario SET apellido = %s WHERE usuario_id = %s",
+    "update_producto_stock":"UPDATE producto SET stock = %s WHERE producto_id = %s",
     "update_usuario_email":"UPDATE usuario SET email = %s WHERE usuario_id = %s",
     "update_usuario_clave":"UPDATE usuario SET clave = %s WHERE usuario_id = %s",
+    "update_usuario_nombre":"UPDATE usuario SET nombre = %s WHERE usuario_id = %s",
+    "update_usuario_apellido":"UPDATE usuario SET apellido = %s WHERE usuario_id = %s",
+    "update_usuario_dni":"UPDATE usuario SET dni = %s WHERE usuario_id = %s",
     "update_usuario_telefono":"UPDATE usuario SET telefono = %s WHERE usuario_id = %s",
     "update_usuario_direccion_id":"UPDATE usuario SET direccion_id = %s WHERE usuario_id = %s",
-    "update_direccion_calle_y_altura":"UPDATE direccion SET calle = %s, altura = %s WHERE direccion_id = %s",
-    "update_direccion_codigo_postal":"UPDATE direccion SET codigo_posta = %s WHERE direccion_id = %s",
-    "update_producto_stock":"UPDATE producto SET stock = %s WHERE producto_id = %s",
 
-    "insert_producto":"INSERT INTO producto(nombre, descripcion, precio, stock, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-    "insert_usuario":"INSERT INTO usuario(dni, nombre, apellido, fecha_de_nacimiento, email, clave, telefono, fecha_de_registro) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-    "insert_compra":"INSERT INTO compra(usuario_id, direccion_id, producto_id, cantidad, precio_total, fecha_de_compra) VALUES (%s, %s, %s, %s, %s, %s)",
+    "insert_pais":"INSERT INTO pais(nombre) VALUES (%s)",
+    "insert_provincia":"INSERT INTO provincia(nombre, pais_id) VALUES (%s, %s)",
+    "insert_ciudad":"INSERT INTO ciudad(nombre, provincia_id) VALUES (%s, %s)",
     "insert_direccion":"INSERT INTO direccion(calle, altura, codigo_postal, ciudad_id) VALUES (%s, %s, %s, %s)",
+    "insert_producto":"INSERT INTO producto(nombre, descripcion, precio, stock, categoria_id, marca_id, fecha_de_publicacion, fecha_de_ultima_modificacion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+    "insert_usuario":"INSERT INTO usuario(email, clave, nombre, apellido, fecha_de_nacimiento, dni, telefono, fecha_de_registro) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+    "insert_compra":"INSERT INTO compra(usuario_id, direccion_id, producto_id, cantidad, precio_total, fecha_de_compra) VALUES (%s, %s, %s, %s, %s, %s)",
 
+    "delete_direccion":"DELETE FROM direccion WHERE direccion_id = %s",
     "delete_producto":"DELETE FROM producto WHERE producto_id = %s",
     "delete_usuario":"DELETE FROM usuario WHERE usuario_id = %s",
     "delete_carrito":"DELETE FROM carrito WHERE carrito_id = %s",
-    "delete_direccion":"DELETE FROM direccion WHERE direccion_id = %s",
 }
 
 class Ecommerce_db:
@@ -51,18 +60,18 @@ class Ecommerce_db:
         self.conexion = mysql.connector.connect(**dbconf)
         self.cursor = self.conexion.cursor()
 
-    def get_todos_los_usuarios(self):
-        self.cursor.execute(queries["select_usuarios"])
+    def get_todos_los_paises(self):
+        self.cursor.execute(queries["select_paises"])
         resultados = self.cursor.fetchall()
         return resultados
 
-    def get_todos_los_productos(self):
-        self.cursor.execute(queries["select_productos"])
+    def get_todos_las_provincias(self):
+        self.cursor.execute(queries["select_provincias"])
         resultados = self.cursor.fetchall()
         return resultados
 
-    def get_todas_las_compras(self):
-        self.cursor.execute(queries["select_compras"])
+    def get_todos_las_ciudades(self):
+        self.cursor.execute(queries["select_ciudades"])
         resultados = self.cursor.fetchall()
         return resultados
 
@@ -76,39 +85,38 @@ class Ecommerce_db:
         resultados=self.cursor.fetchall()
         return resultados
 
-    def get_carrito_de_usuario_segun_id(self, usuario_id):
+    def get_todos_los_productos(self):
+        self.cursor.execute(queries["select_productos"])
+        resultados = self.cursor.fetchall()
+        return resultados
+
+    def get_todos_los_usuarios(self):
+        self.cursor.execute(queries["select_usuarios"])
+        resultados = self.cursor.fetchall()
+        return resultados
+
+    def get_todas_las_compras(self):
+        self.cursor.execute(queries["select_compras"])
+        resultados = self.cursor.fetchall()
+        return resultados
+
+    def get_provincias_segun_pais_id(self, pais_id):
+        val = (pais_id,)
+        self.cursor.execute(queries["select_provincias_segun_pais"], val)
+        resultados = self.cursor.fetchall()
+        return resultados
+
+    def get_ciudades_segun_provincia_id(self, provincia_id):
+        val = (provincia_id,)
+        self.cursor.execute(queries["select_ciudades_segun_provincia"], val)
+        resultados = self.cursor.fetchall()
+        return resultados
+
+    def get_carrito_segun_usuario_id(self, usuario_id):
         val = (usuario_id,)
         self.cursor.execute(queries["select_carrito_segun_usuario"], val)
         resultados = self.cursor.fetchall()
         return resultados
-
-    def get_usuario_segun_id(self, usuario_id):
-        val = (usuario_id,)
-        self.cursor.execute(queries["select_usuario_segun_id"], val)
-        resultado = self.cursor.fetchone()
-        return resultado
-
-    def get_datos_login(self, email):
-        val = (email,)
-        self.cursor.execute(queries["select_login_segun_email"], val)
-        resultado = self.cursor.fetchone()
-        return resultado
-
-    def get_id_de_categoria(self, categoria_nombre):
-        val = (categoria_nombre,)
-        self.cursor.execute(queries["select_categoria_id_segun_nombre"], val)
-        categoria_id = self.cursor.fetchone()
-        if not categoria_id:
-            categoria_id = (0,)
-        return categoria_id[0]
-
-    def get_id_de_marca(self, marca_nombre):
-        val = (marca_nombre,)
-        self.cursor.execute(queries["select_marca_id_segun_nombre"], val)
-        marca_id = self.cursor.fetchone()
-        if not marca_id:
-            marca_id = (0,)
-        return marca_id[0]
 
     def get_id_de_pais(self, pais_nombre):
         val = (pais_nombre,)
@@ -134,9 +142,31 @@ class Ecommerce_db:
             ciudad_id = (0,)
         return ciudad_id[0]
 
-    def get_direccion_segun_id(self, direccion_id):
-        val = (direccion_id,)
-        self.cursor.execute(queries["select_direccion_segun_id"])
+    def get_id_de_categoria(self, categoria_nombre):
+        val = (categoria_nombre,)
+        self.cursor.execute(queries["select_categoria_id_segun_nombre"], val)
+        categoria_id = self.cursor.fetchone()
+        if not categoria_id:
+            categoria_id = (0,)
+        return categoria_id[0]
+
+    def get_id_de_marca(self, marca_nombre):
+        val = (marca_nombre,)
+        self.cursor.execute(queries["select_marca_id_segun_nombre"], val)
+        marca_id = self.cursor.fetchone()
+        if not marca_id:
+            marca_id = (0,)
+        return marca_id[0]
+
+    def get_usuario_segun_id(self, usuario_id):
+        val = (usuario_id,)
+        self.cursor.execute(queries["select_usuario_segun_id"], val)
+        resultado = self.cursor.fetchone()
+        return resultado
+
+    def get_login_usuario(self, email):
+        val = (email,)
+        self.cursor.execute(queries["select_login_segun_email"], val)
         resultado = self.cursor.fetchone()
         return resultado
 
@@ -157,6 +187,12 @@ class Ecommerce_db:
         self.cursor.execute(queries["select_pais_segun_id"], val)
         resultados = self.cursor.fetchone()
         return resultados
+
+    def get_direccion_segun_id(self, direccion_id):
+        val = (direccion_id,)
+        self.cursor.execute(queries["select_direccion_segun_id"])
+        resultado = self.cursor.fetchone()
+        return resultado
 
     def get_precio_de_producto(self, producto):
         val = (producto.get_producto_id(),)
@@ -179,7 +215,7 @@ class Ecommerce_db:
         return resultado
 
     def registrar_usuario(self, usuario):
-        val = (usuario.get_dni(), usuario.get_nombre(), usuario.get_apellido(), usuario.get_fecha_de_nacimiento(), usuario.get_email(), usuario.get_clave(), usuario.get_telefono(), usuario.get_fecha_de_registro())
+        val = (usuario.get_email(), usuario.get_clave(), usuario.get_nombre(), usuario.get_apellido(), usuario.get_fecha_de_nacimiento(), usuario.get_dni(), usuario.get_telefono(), usuario.get_fecha_de_registro())
         self.cursor.execute(queries["insert_usuario"], val)
         self.conexion.commit()
         usuario.set_usuario_id(self.cursor.lastrowid)
@@ -254,8 +290,13 @@ class Ecommerce_db:
         self.cursor.execute(queries["update_usuario_clave"], val)
         self.conexion.commit()
 
+    def actualizar_usuario_dni(self, usuario):
+        val = (usuario.get_dni(), usuario.get_usuario_id())
+        self.cursor.execute(queries["update_usuario_dni"], val)
+        self.conexion.commit()
+
     def actualizar_usuario_telefono(self, usuario):
-        val = (usuario.get_telefono(), usuario.get_usuario_id)
+        val = (usuario.get_telefono(), usuario.get_usuario_id())
         self.cursor.execute(queries["update_usuario_telefono"], val)
         self.conexion.commit()
 
@@ -288,11 +329,3 @@ class Ecommerce_db:
         val = (producto.get_stock(), producto.get_producto_id())
         self.cursor.execute(queries["update_producto_stock"], val)
         self.conexcion.commit()
-
-if __name__=="__main__":
-    from dbconf import dbconf
-    db = Ecommerce_db(dbconf)
-    lista_usuarios=db.get_todos_los_usuarios()
-    lista_productos=db.get_todos_los_productos()
-    print(lista_usuarios)
-    print(lista_productos)
