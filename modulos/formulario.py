@@ -48,16 +48,15 @@ class Formulario:
         for campo, setter in modificadores.items():
             limpiar_pantalla()
             print(producto.ficha_producto())
-            if campo == "Marca_id":
+            if campo == "Marca":
                 print("Marcas registradas:")
                 self.listar_opciones(marcas)
-            elif campo == "Categoria_id":
+            elif campo == "Categoria":
                 print("Categorias disponibles:")
                 self.listar_opciones(categorias)
-            dato = input(campo + ": ")
+            dato = input("->" + campo + ": ")
             while not setter(dato):
-                print("No es un dato válido!")
-                dato = input(campo)
+                dato = input("->" + campo + ": ")
         producto.set_fecha_de_publicacion(self.ahora())
         producto.set_fecha_de_ultima_modificacion(self.ahora())
         limpiar_pantalla()
@@ -70,7 +69,7 @@ class Formulario:
     def nuevo_usuario(self):
         '''Formulario que se mostrara cuando se desee crear un nuevo usuario'''
 
-        usuario = Usuario()
+        usuario = Usuario(fecha_de_nacimiento=self.hoy())
         modificadores = {
             "Email": usuario.set_email,
             "Clave": usuario.set_clave,
@@ -98,7 +97,7 @@ class Formulario:
                 dato = input("->" + campo + ": ")
                 while not setter(dato):
                     dato = input("->" + campo + ": ")
-        usuario.set_fecha_de_registro(self.hoy())
+        usuario.set_fecha_de_registro(self.ahora())
         limpiar_pantalla()
         print(usuario.ficha_usuario())
         input("-> Enviar")

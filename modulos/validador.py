@@ -33,4 +33,4 @@ def valida_clave_correcta(clave1, clave2):
     return clave1 == clave2.encode()
 
 def valida_administrador(usuario, clave):
-    return usuario == "@admin" and clave == "RGVsZmluYTEy"
+    return usuario == "@admin" and clave == "".encode()

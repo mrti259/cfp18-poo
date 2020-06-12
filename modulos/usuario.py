@@ -3,7 +3,7 @@ from .validador import *
 
 class Usuario:
 
-    def __init__(self, usuario_id=0, email="", clave="", nombre="", apellido="", fecha_de_nacimiento="dd/mm/aaaa", dni=0, telefono=0, direccion_id=0, fecha_de_registro=""):
+    def __init__(self, usuario_id=0, email="", clave="", nombre="", apellido="", fecha_de_nacimiento="", dni=0, telefono=0, direccion_id=0, fecha_de_registro=""):
         '''Inicializa un usuario con sus datos provenientes de la base de datos o se crea uno nuevo
          con los valores por default. Direccion, compras y carrito se cargan por métodos'''
 
