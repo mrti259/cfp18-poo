@@ -1,14 +1,13 @@
 class Provincia:
-    def __init__(self, provincia_id=0, nombre="", pais_id=0, pais=None):
+    def __init__(self, provincia_id=0, nombre="", pais_id=0):
         self.provincia_id = provincia_id
         self.nombre = nombre
         self.pais_id = pais_id
-        self.pais = pais
 
 
 
     def __str__(self):
-        return (f"[{self.get_provincia_id()}] {self.get_nombre()}, {self.pais.get_nombre()}")
+        return (f"({self.get_provincia_id()}) {self.get_nombre()}")
 
 
 
@@ -36,12 +35,3 @@ class Provincia:
 
         def get_pais_id(self):
             return self.pais_id
-
-
-
-    def set_pais(self, pais):
-        self.pais = pais
-        return 1
-
-    def get_pais(self):
-        return self.pais

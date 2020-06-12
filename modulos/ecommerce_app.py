@@ -112,6 +112,7 @@ class Ecommerce_app:
         if datos_login:
             print("Ese email ya se encuentra registrado!")
         else:
+            self.db.registrar_direccion(usuario.get_direccion())
             self.db.registrar_usuario(usuario)
             print("Usuario registrado!")
         input()
@@ -309,7 +310,6 @@ class Ecommerce_app:
 
         direccion = self.formulario.nueva_direccion()
         self.db.registrar_direccion(direccion)
-        self.usuario.set_direccion_id(direccion.get_direccion_id())
         print("Direccion registrada!")
         input()
 
@@ -446,7 +446,7 @@ Menu Administrador:
 
 
     def menu_abcm_producto(self):
-        '''Menu de Alta Baja Modificacion de Productos'''
+        '''Menu de Alta Baja Consultas Modificacion de Productos'''
 
         while True:
             limpiar_pantalla()

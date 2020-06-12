@@ -27,7 +27,7 @@
 - [x] Alta productos
 - [ ] Baja productos
 - [ ] Modificacion productos
-- [x] Alta direccion < errores
+- [x] Alta direccion
 - [ ] Baja direccion
 - [ ] Modificacion direccion
 - [ ] Alta carrito

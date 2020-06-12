@@ -1,3 +1,4 @@
+from .extras import fecha_a_string
 from .validador import *
 
 class Usuario:
@@ -39,7 +40,7 @@ Nombre y apellido: {self.get_nombre()} {self.get_apellido()}
 Email: {self.get_email()}
 DNI: {self.get_dni()}
 Telefono: {self.get_telefono()}
-Fecha de nacimiento: {self.get_fecha_de_nacimiento()}
+Fecha de nacimiento: {fecha_a_string(self.get_fecha_de_nacimiento())}
 Direccion: {self.get_direccion()}
 Fecha de registro: {self.get_fecha_de_registro()}
 """)

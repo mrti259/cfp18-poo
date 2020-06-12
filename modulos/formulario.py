@@ -109,17 +109,14 @@ class Formulario:
     def nueva_direccion(self):
         '''Formulario que se mostrara cuando se desee registrar una nueva direccion'''
 
-        pais = Pais()
-        provincia = Provincia()
-        ciudad = Ciudad()
         direccion = Direccion()
         modificadores = {
             "Calle": direccion.set_calle,
             "Altura": direccion.set_altura,
             "Codigo postal": direccion.set_codigo_postal,
-            "Pais": pais.set_pais_id,
-            "Provincia": provincia.set_provincia_id,
-            "Ciudad": ciudad.set_ciudad_id,
+            "Pais": direccion.set_pais_id,
+            "Provincia": direccion.set_provincia_id,
+            "Ciudad": direccion.set_ciudad_id,
         }
         for campo, setter in modificadores.items():
             limpiar_pantalla()
@@ -129,20 +126,16 @@ class Formulario:
                 print("Paises disponibles:")
                 self.listar_opciones(paises)
             elif campo == "Provincia":
-                provincias = [Provincia(*datos, pais) for datos in self.get_provincias_segun_pais_id(pais.get_pais_id())]
+                provincias = [Provincia(*datos) for datos in self.get_provincias_segun_pais_id(direccion.get_pais_id())]
                 print("Provincias disponibles:")
                 self.listar_opciones(provincias)
             elif campo == "Ciudad":
-                ciudades = [Ciudad(*datos, provincia) for datos in self.get_ciudades_segun_provincia_id(provincia.get_provincia_id())]
+                ciudades = [Ciudad(*datos) for datos in self.get_ciudades_segun_provincia_id(direccion.get_provincia_id())]
                 print("Ciudades disponibles:")
-                self.listar_opciones(ciudades)
+                self.listar_opciones(ciudades)    
             dato = input("-> " + campo + ": ")
             while not setter(dato):
                 dato = input("-> " + campo + ": ")
-        direccion.set_ciudad_id(ciudad.get_ciudad_id())
-        provincia.set_pais(pais)
-        ciudad.set_provincia(provincia)
-        direccion.set_ciudad(ciudad)
         limpiar_pantalla()
         print(direccion.ficha_direccion())
         input("-> Enviar")

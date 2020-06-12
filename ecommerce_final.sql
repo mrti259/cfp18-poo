@@ -124,19 +124,16 @@ CREATE TABLE carrito  (
   FOREIGN KEY (producto_id) REFERENCES producto  (producto_id)
 );
 
-INSERT INTO pais(pais_id, nombre) VALUES (1, "Desconocido");
 INSERT INTO pais(pais_id, nombre) VALUES (2, "Argentina");
 INSERT INTO pais(pais_id, nombre) VALUES (3, "Uruguay");
 INSERT INTO pais(pais_id, nombre) VALUES (4, "España");
 INSERT INTO pais(pais_id, nombre) VALUES (5, "Alemania");
-INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (1, "Desconocido", 1);
-INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (2, "CABA", 2);
-INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (3, "Santa Fe", 2);
-INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (4, "La Pampa", 2);
-INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (5, "Cataluña", 4);
-INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (6, "Colonia", 3);
-INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (7, "Montevideo", 3);
-INSERT INTO ciudad(ciudad_id, nombre, provincia_id) VALUES (1, "Desconocido", 1);
+INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (6, "CABA", 2);
+INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (7, "Santa Fe", 2);
+INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (8, "La Pampa", 2);
+INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (9, "Cataluña", 4);
+INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (10, "Colonia", 3);
+INSERT INTO provincia(provincia_id, nombre, pais_id) VALUES (11, "Montevideo", 3);
 INSERT INTO ciudad(ciudad_id, nombre, provincia_id) VALUES (2, "CABA", 2);
 INSERT INTO ciudad(ciudad_id, nombre, provincia_id) VALUES (3, "Rosario", 3);
 INSERT INTO ciudad(ciudad_id, nombre, provincia_id) VALUES (4, "Santa Rosa", 4);
@@ -148,4 +145,3 @@ INSERT INTO marca(marca_id, nombre) VALUES (1, "Desconocido");
 INSERT INTO categoria(categoria_id, nombre) VALUES (1, "Desconocido");
 INSERT INTO producto(producto_id, nombre, marca_id, categoria_id) VALUES (1, "Desconocido", 1, 1);
 INSERT INTO usuario(usuario_id, email, direccion_id) VALUES (1, "Desconocido", 1);
-
