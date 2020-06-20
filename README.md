@@ -37,6 +37,11 @@
 - [ ] Consultas compras
 - [ ] Consultas productos
 
+**Flask:**
+- [ ] CSS
+- [ ] Registros
+- [ ] Conectarlo a la base de datos
+
 **Agregar:**
 - [x] validate_email (necesita py3dns)
 - [x] getpass

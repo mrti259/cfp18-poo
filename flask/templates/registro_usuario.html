@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block body %}
+  <div>
+    <form action="/registrar_usuario" method="POST">
+      <input type="text" name="nombre" placeholder="Nombre">
+      <input type="text" name="apellido" placeholder="Apellido">
+      <input type="email" name="email" placeholder="Email">
+      <input type="password" name="clave" placeholder="clave">
+      <input type="date" name="fecha_de_nacimiento" placeholder="Fecha de Nacimiento">
+      <input type="number" name="dni" placeholder="DNI">
+      <input type="number" name="telefono" placeholder="Telefono">
+      <input type="submit">
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block body %}
+  <div>
+    <form action="/registrar_producto" method="POST">
+      <input type="text" name="nombre" placeholder="Nombre">
+      <input type="text" name="descripcion" placeholder="Descripcion">
+      <input type="number" name="precio" placeholder="Precio">
+      <input type="number" name="stock" placeholder="Stock">
+      <input type="submit">
+    </form>
+  </div>
+{% endblock %}
