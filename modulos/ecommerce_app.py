@@ -18,22 +18,10 @@ class Ecommerce_app:
         self.db = Ecommerce_db(dbconf)
         self.usuario = None
         self.producto = None
-        self.productos = []
-        self.marcas = []
-        self.categorias = []
+        self.get_productos = self.db.get_todos_los_productos
+        self.get_marcas = self.db.get_todas_las_marcas
+        self.get_categorias = self.get_todas_las_categorias
         self.formulario = Formulario(self.db)
-
-
-
-    def actualizar_catalogo(self):
-        '''Vuelve a cargar los datos de productos, marcas y categorias'''
-        datos_productos = self.db.get_todos_los_productos()
-        self.productos = [Producto(*datos) for datos in datos_productos]
-        datos_marcas = self.db.get_todas_las_marcas()
-        self.marcas = [Marca(*datos) for datos in datos_marcas]
-        datos_categorias = self.db.get_todas_las_categorias()
-        self.categorias = [Categoria(*datos) for datos in datos_categorias]
-        # ~ Alternativa en formularios 
 
 
 
@@ -318,7 +306,6 @@ class Ecommerce_app:
     def eliminar_cuenta(self):
         '''Elimina usuario de la aplicacion y de la base de datos'''
 
-        # ~ limpiar_pantalla()
         print("¿Quiere eliminar su cuenta?")
         if input("Confirmar (s/n): ") == "s":
             if input("Esta acción no se puede deshacer (s/n): ") == 's':
@@ -354,8 +341,9 @@ class Ecommerce_app:
         '''Muestra los productos en pantalla'''
 
         limpiar_pantalla()
+        productos = [Producto(*datos) for datos in self.get_productos()]
         print("Lista de productos:")
-        for producto in self.productos:
+        for producto in productos:
             print(producto)
 
 
@@ -380,7 +368,20 @@ class Ecommerce_app:
     def buscar_productos_por_nombre(self):
         '''Carga un producto de la db buscandolo por su nombre'''
 
-
+        nombre = input("Nombre: ")
+        resultados = self.db.productos_por_nombre(nombre)
+        if resultados:
+            print("Se obtuvieron los siguientes resultados:")
+            for datos_producto in resultados:
+                print(datos_producto)
+            print("Si busca uno de los siguientes productos, ingrese su id: ")
+            producto_id = int(input("Id: "))
+            for datos in resultados:
+                if producto_id == datos[0]:
+                    self.producto = Producto(*datos)
+                    print("Producto seleccionado")
+        if not self.producto:
+            print("No se ha seleccionado ningun producto")
 
 
 
@@ -471,6 +472,8 @@ Menu Administrador:
                     if opc=="2":
                         self.menu_modificar_producto(producto)
 
+
+
     def registrar_producto(self):
         '''Registro de producto
 
@@ -483,14 +486,108 @@ Menu Administrador:
 
 
 
-
     def eliminar_producto(self):
         '''Elimina un producto de la aplicación y de la base de datos.'''
 
-
-
+        print("¿Quiere eliminar el producto?")
+        if input("Confirmar (s/n): ") == "s":
+            if input("Esta acción no se puede deshacer (s/n): ") == 's':
+                self.db.eliminar_producto(self.producto)
+                self.producto = None
 
 
 
     def menu_modificar_producto(self):
         '''Permite acceder a las funciones para modificar los datos de un producto'''
+
+        while self.producto:
+            limpiar_pantalla()
+            print(self.producto.ficha_producto())
+            print("""
+Menu Producto:
+==============
+[1] Modificar nombre
+[2] Modificar descripcion
+[3] Modificar precio
+[4] Modificar stock
+[5] Modificar marca
+[6] Modificar categoria
+[x] Volver
+""")
+            rta = input("->")
+            if rta == "x":
+                return
+            elif rta == "1":
+                self.modificar_nombre_producto()
+            elif rta == "2":
+                self.modificar_descripcion()
+            elif rta == "3":
+                self.modificar_precio()
+            elif rta == "4":
+                self.modificar_stock()
+            elif rta == "5":
+                self.modificar_marca()
+            elif rta == "6":
+                self.modificar_categoria()
+
+
+
+    def modificar_nombre_producto(self):
+        ''' '''
+
+        nombre = input("Nuevo nombre: ")
+        if consiente_cambio() and self.producto.set_nombre(nombre):
+            fecha_de_ultima_modificacion = str(datetime.now())
+            self.producto.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
+            self.db.actualizar_producto_nombre(producto)
+        else:
+            print("-cambios descartados-")
+
+
+
+    def modificar_descripcion(self):
+        ''' '''
+
+        descripcion = input("Nueva descripcion: ")
+        if consiente_cambio() and self.producto.set_descripcion(descripcion):
+            fecha_de_ultima_modificacion = str(datetime.now())
+            self.producto.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
+            self.db.actualizar_producto_descripcion(producto)
+        else:
+            print("-cambios descartados-")
+
+
+
+    def modificar_precio(self):
+        ''' '''
+
+        precio = float(input("Nuevo precio: "))
+        if consiente_cambio() and self.producto.set_precio(precio):
+            fecha_de_ultima_modificacion = str(datetime.now())
+            self.producto.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
+            self.db.actualizar_producto_precio(producto)
+        else:
+            print("-cambios descartados-")
+
+
+
+    def modificar_stock(self):
+        ''' '''
+
+        stock = input("Nuevo stock: "))
+        if consiente_cambio() and producto.set_stock(stock):
+            fecha_de_ultima_modificacion = str(datetime.now())
+            producto.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
+            db.actualizar_producto_stock(producto)
+        else:
+            print("-cambios descartados-")
+
+
+
+    def modificar_marca(self):
+        ''' '''
+
+
+
+    def modificar_categoria(self):
+        ''' '''
