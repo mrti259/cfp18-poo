@@ -21,7 +21,7 @@ queries = {
     "select_ciudad_segun_id":"SELECT nombre FROM ciudad WHERE ciudad_id  = %s",
     "select_provincia_segun_id":"SELECT nombre, pais_id FROM provincia WHERE provincia_id = %s",
     "select_pais_segun_id":"SELECT nombre FROM pais WHERE pais_id = %s",
-    "select_productos_segun_nombre":"SELECT * FROM producto WHERE nombre = %s",
+    "select_productos_segun_nombre":"SELECT * FROM producto WHERE nombre LIKE %s",
     "select_producto_segun_id":"SELECT * FROM producto WHERE producto_id = %s",
     "select_precio_segun_producto":"SELECT precio FROM producto WHERE producto_id = %s",
     "select_categoria_id_segun_nombre":"SELECT categoria_id FROM categoria WHERE nombre = %s",

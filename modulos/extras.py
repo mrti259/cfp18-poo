@@ -3,6 +3,7 @@ import platform
 from base64 import encodebytes, decodebytes
 from getpass import getpass
 from datetime import datetime, date
+from time import sleep
 from .validador import valida_clave_segura
 
 # ~ class Extras:
@@ -15,6 +16,9 @@ def limpiar_pantalla():
     else:
         clear = "clear"
     os.system(clear)
+
+def espera(tiempo=1):
+    sleep(tiempo)
 
 def clave_encriptada(clave):
     '''Encriptra una clave'''

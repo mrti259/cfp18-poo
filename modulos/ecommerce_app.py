@@ -1,4 +1,3 @@
-from getpass import getpass
 from .carrito import Carrito
 from .categoria import Categoria
 from .ecommerce_db import Ecommerce_db
@@ -20,7 +19,7 @@ class Ecommerce_app:
         self.producto = None
         self.get_productos = self.db.get_todos_los_productos
         self.get_marcas = self.db.get_todas_las_marcas
-        self.get_categorias = self.get_todas_las_categorias
+        self.get_categorias = self.db.get_todas_las_categorias
         self.formulario = Formulario(self.db)
 
 
@@ -66,7 +65,7 @@ class Ecommerce_app:
             self.comprobar_login(email, clave)
         elif email:
             print("No es un email válido.")
-        input()
+        espera()
 
 
 
@@ -103,7 +102,7 @@ class Ecommerce_app:
             self.db.registrar_direccion(usuario.get_direccion())
             self.db.registrar_usuario(usuario)
             print("Usuario registrado!")
-        input()
+        espera()
 
 
 
@@ -118,7 +117,7 @@ class Ecommerce_app:
             print(clave_desencriptada(datos_usuario[0]))
         else:
             print("No se encuentra ese email")
-        input()
+        espera()
 
 
 
@@ -191,34 +190,31 @@ class Ecommerce_app:
     def modificar_nombre(self):
         '''Modificar nombre del usuario'''
 
-        # ~ limpiar_pantalla()
         nombre = input("Nuevo nombre: ")
         if consiente_cambio() and self.usuario.set_nombre(nombre):
             self.db.actualizar_usuario_nombre(self.usuario)
             print("-cambios realizados-")
         else:
             print("-cambios descartados-")
-        input()
+        espera()
 
 
 
     def modificar_apellido(self):
         '''Modificar apellido del usuario'''
 
-        # ~ limpiar_pantalla()
         apellido = input("Nuevo apellido: ")
         if consiente_cambio() and self.usuario.set_apellido(apellido):
             self.db.actualizar_usuario_apellido(self.usuario)
             print("-cambios realizados-")
         else:
             print("-cambios descartados-")
-        input()
+        espera()
 
 
     def modificar_email(self):
         '''Modificar email del usuario'''
 
-        # ~ limpiar_pantalla()
         email = input("Nuevo email: ")
         if not self.db.get_login_usuario(email):
             if consiente_cambio() and self.usuario.set_email(email):
@@ -228,14 +224,13 @@ class Ecommerce_app:
                 print("-cambios descartados-")
         else:
             print("Ese email se encuentra registrado.")
-        input()
+        espera()
 
 
 
     def modificar_clave(self, recuperar = False):
         '''Modificar clave del usuario'''
 
-        # ~ limpiar_pantalla()
         clave0 = ingresar_clave("Nueva clave: ", check=True)
         clave1 = ingresar_clave("Repita la clave:")
         if clave0 == clave1:
@@ -251,28 +246,26 @@ class Ecommerce_app:
                     print("Contraseña incorrecta")
         else:
             print("Las contraseñas no coinciden.")
-        input()
+        espera()
 
 
 
     def modificar_dni(self):
         '''Modificar dni del usuario'''
 
-        # ~ limpiar_pantalla()
         dni = input("Nuevo DNI: ")
         if consiente_cambio() and self.usuario.set_dni(dni):
             self.db.actualizar_usuario_dni(self.usuario)
             print("-cambios realizados-")
         else:
             print("-cambios descartados-")
-        input()
+        espera()
 
 
 
     def modificar_telefono(self):
         '''Modificar telefono del usuario'''
 
-        # ~ limpiar_pantalla()
         telefono = input("Nuevo telefono: ")
         if telefono.isdigit():
             if consiente_cambio():
@@ -281,13 +274,29 @@ class Ecommerce_app:
             print("-cambios realizados-")
         else:
             print("-cambios descartados-")
-        input()
+        espera()
 
 
 
     def modificar_direccion(self):
         '''Modificar direccion predeterminada del usuario'''
 
+        while self.usuario.get_direccion():
+            limpiar_pantalla()
+            print(self.usuario.ficha_usuario())
+            print(self.usuario.get_direccion().ficha_direccion())
+            print("""
+Modificar direccion:
+====================
+[1] Registrar otra direccion
+[x] Volver""")
+            rta = input("->")
+            if rta == "x":
+                return
+            elif rta == "1":
+                direccion = self.registrar_direccion()
+                self.usuario.set_direccion_id(direccion.get_direccion_id())
+                self.db.actualizar_usuario_direccion_id(self.usuario)
 
 
 
@@ -300,6 +309,7 @@ class Ecommerce_app:
         self.db.registrar_direccion(direccion)
         print("Direccion registrada!")
         input()
+        return(direccion)
 
 
 
@@ -360,7 +370,7 @@ class Ecommerce_app:
         else:
             self.producto = None
             print("No se pudo seleccionar un producto")
-        input()
+        espera()
 
 
 
@@ -368,8 +378,8 @@ class Ecommerce_app:
     def buscar_productos_por_nombre(self):
         '''Carga un producto de la db buscandolo por su nombre'''
 
-        nombre = input("Nombre: ")
-        resultados = self.db.productos_por_nombre(nombre)
+        nombre = ("%" + input("Nombre: ") + "%")
+        resultados = self.db.get_productos_segun_nombre(nombre)
         if resultados:
             print("Se obtuvieron los siguientes resultados:")
             for datos_producto in resultados:
@@ -382,6 +392,7 @@ class Ecommerce_app:
                     print("Producto seleccionado")
         if not self.producto:
             print("No se ha seleccionado ningun producto")
+        espera()
 
 
 
@@ -407,6 +418,10 @@ class Ecommerce_app:
 
         while self.usuario:
             limpiar_pantalla()
+            print(self.usuario)
+            print("Carrito de compras:")
+            for carrito in self.usuario.get_carrito():
+                print(carrito)
             input()
             return
 
@@ -417,6 +432,10 @@ class Ecommerce_app:
 
         while self.usuario:
             limpiar_pantalla()
+            print(self.usuario)
+            print("Compras:")
+            for compras in self.usuario.get_compras():
+                print(compras)
             input()
             return
 
@@ -464,13 +483,15 @@ Menu Administrador:
                 self.registrar_producto()
             elif rta == "4":
                 self.listar_productos()
+                input()
             else:
-                producto = self.buscar_producto_por_nombre()
-                if producto:
+                self.listar_productos()
+                self.seleccionar_producto()
+                if self.producto:
                     if rta == "3":
-                        self.eliminar_producto(producto)
-                    if opc=="2":
-                        self.menu_modificar_producto(producto)
+                        self.eliminar_producto()
+                    elif rta == "2":
+                        self.menu_modificar_producto()
 
 
 
@@ -482,7 +503,7 @@ Menu Administrador:
         producto = self.formulario.nuevo_producto()
         self.db.registrar_producto(producto)
         print("Producto registrado")
-        input()
+        espera()
 
 
 
@@ -494,6 +515,7 @@ Menu Administrador:
             if input("Esta acción no se puede deshacer (s/n): ") == 's':
                 self.db.eliminar_producto(self.producto)
                 self.producto = None
+        espera()
 
 
 
@@ -539,9 +561,10 @@ Menu Producto:
         if consiente_cambio() and self.producto.set_nombre(nombre):
             fecha_de_ultima_modificacion = str(datetime.now())
             self.producto.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
-            self.db.actualizar_producto_nombre(producto)
+            self.db.actualizar_producto_nombre(self.producto)
         else:
             print("-cambios descartados-")
+        espera()
 
 
 
@@ -552,9 +575,10 @@ Menu Producto:
         if consiente_cambio() and self.producto.set_descripcion(descripcion):
             fecha_de_ultima_modificacion = str(datetime.now())
             self.producto.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
-            self.db.actualizar_producto_descripcion(producto)
+            self.db.actualizar_producto_descripcion(self.producto)
         else:
             print("-cambios descartados-")
+        espera()
 
 
 
@@ -565,22 +589,24 @@ Menu Producto:
         if consiente_cambio() and self.producto.set_precio(precio):
             fecha_de_ultima_modificacion = str(datetime.now())
             self.producto.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
-            self.db.actualizar_producto_precio(producto)
+            self.db.actualizar_producto_precio(self.producto)
         else:
             print("-cambios descartados-")
+        espera()
 
 
 
     def modificar_stock(self):
         ''' '''
 
-        stock = input("Nuevo stock: "))
+        stock = input("Nuevo stock: ")
         if consiente_cambio() and producto.set_stock(stock):
             fecha_de_ultima_modificacion = str(datetime.now())
             producto.set_fecha_de_ultima_modificacion(fecha_de_ultima_modificacion)
-            db.actualizar_producto_stock(producto)
+            db.actualizar_producto_stock(self.producto)
         else:
             print("-cambios descartados-")
+        espera()
 
 
 
