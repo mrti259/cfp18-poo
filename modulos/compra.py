@@ -81,6 +81,7 @@ class Compra:
 
     def set_producto(self, producto):
         self.producto = producto
+        producto.decr_stock(self.get_cantidad())
         return 1
 
     def get_producto(self):

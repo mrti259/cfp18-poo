@@ -31,8 +31,8 @@
 - [ ] Baja direccion
 - [x] Modificacion direccion
 - [x] Alta carrito
-- [ ] Baja carrito
-- [ ] Modificacion carrito
+- [x] Baja carrito
+- [x] Modificacion carrito
 - [x] Registro compras
 - [x] Consultas compras
 - [ ] Consultas productos

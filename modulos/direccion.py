@@ -11,7 +11,7 @@ class Direccion:
     def __str__(self):
         '''Da formato a una direccion para ser pasado como cadena'''
 
-        return (f"{self.get_calle()} {self.get_altura()} {self.get_codigo_postal()}, ({self.get_ciudad()}) ")
+        return (f"{self.get_calle()} {self.get_altura()} {self.get_codigo_postal()}, {self.get_ciudad()} ")
 
 
     def ficha_direccion(self):

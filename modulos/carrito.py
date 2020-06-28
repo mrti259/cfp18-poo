@@ -1,3 +1,5 @@
+from .validador import valida_cantidad
+
 class Carrito:
     def __init__(self, carrito_id, usuario_id, producto_id, cantidad):
         self.carrito_id = carrito_id
@@ -42,8 +44,9 @@ class Carrito:
 
 
     def set_cantidad(self, cantidad):
-        self.cantidad = cantidad
-        return 1
+        if valida_cantidad(cantidad, self.producto):
+            self.cantidad = int(cantidad)
+            return 1
 
     def get_cantidad(self):
         return self.cantidad

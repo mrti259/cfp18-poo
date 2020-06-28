@@ -36,7 +36,9 @@ class Ecommerce_app:
 
         while True:
             limpiar_pantalla()
-            print("""Menu de inicio
+            print("""\
+Menu de inicio:
+===============
 [1] Iniciar sesión
 [2] Registrarse
 [3] Recuperar contraseña
@@ -59,7 +61,9 @@ class Ecommerce_app:
         '''Pide email y clave. El administrador puede acceder al ABM de producto. Un usuario inicia sesion.'''
 
         limpiar_pantalla()
-        print("Iniciar sesión: ")
+        print("""\
+Iniciar sesión:
+===============""")
         email = input("Email: ")
         clave = ingresar_clave("Contraseña: ")
         if valida_administrador(email, clave):
@@ -82,10 +86,7 @@ class Ecommerce_app:
         datos_db = self.db.get_login_usuario(email)
         if datos_db:
             if valida_clave_correcta(clave, datos_db[0]):
-                datos_usuario = self.db.get_usuario_segun_id(datos_db[1])
-                self.usuario = Usuario(*datos_usuario)
-                direccion = Direccion(*self.db.get_direccion_segun_id(self.usuario.get_direccion_id()))
-                self.usuario.set_direccion(direccion)
+                self.usuario = self.db.get_usuario_segun_id(datos_db[1])
                 print("Inicio de sesión exitoso")
             else:
                 print("Contraseña incorrecta")
@@ -135,7 +136,9 @@ class Ecommerce_app:
         while self.usuario:
             limpiar_pantalla()
             print(self.usuario.ficha_usuario())
-            print("""Menu Usuario
+            print("""\
+Menu Usuario:
+=============
 [1] Configuracion perfil
 [2] Ver catálogo
 [3] Ver carrito/Comprar
@@ -165,16 +168,18 @@ class Ecommerce_app:
         while self.usuario:
             limpiar_pantalla()
             print(self.usuario.ficha_usuario())
-            print("""Menu:
-[1]Modificar nombre
-[2]Modificar apellido
-[3]Modificar email
-[4]Modificar clave
-[5]Modificar dni
-[6]Modificar telefono
-[7]Modificar direccion
-[8]Eliminar cuenta
-[x]Volver""")
+            print("""\
+Menu:
+=====
+[1] Modificar nombre
+[2] Modificar apellido
+[3] Modificar email
+[4] Modificar clave
+[5] Modificar dni
+[6] Modificar telefono
+[7] Modificar direccion
+[8] Eliminar cuenta
+[x] Volver""")
             rta = input("-> ")
             if rta == "1":
                 self.modificar_nombre()
@@ -249,7 +254,7 @@ class Ecommerce_app:
                 self.db.actualizar_usuario_clave(self.usuario)
             else:
                 clave2 = ingresar_clave("Ingrese su clave actual: ")
-                if clave2 == self.usuario.get_clave():
+                if valida_clave_correcta(clave2, self.usuario.get_clave()):
                     self.usuario.set_clave(clave0)
                     self.db.actualizar_usuario_clave(self.usuario)
                 else:
@@ -339,38 +344,54 @@ Modificar direccion:
 
         while True:
             limpiar_pantalla()
-            print("""Catálogo:
+            print("""\
+Catálogo:
+=========
 [1] Ver todo
 [2] Buscar por nombre
 [3] Filtrar
 [x] Volver""")
             rta = input("-> ")
-            if rta == "x":
-                return
-            elif rta == "1":
-                self.listar_productos()
-                self.seleccionar_producto()
+            if rta == "1":
+                producto = self.seleccionar_producto(self.db.get_todos_los_productos())
             elif rta == "2":
-                self.buscar_productos_por_nombre()
-                self.seleccionar_producto()
+                producto = self.buscar_productos_por_nombre()
             elif rta == "3":
                 self.filtrar_productos()
-                self.seleccionar_producto()
-            if self.producto:
-                self.agregar_al_carrito()
+            elif rta == "x":
+                return
+
+            if producto and self.usuario:
+                self.agregar_al_carrito(producto)
+            elif producto:
+                self.producto = producto
 
 
 
-    def listar_productos(self):
+    def listar_productos(self, productos):
         '''Muestra los productos en pantalla'''
 
-        limpiar_pantalla()
-        productos = [Producto(*datos) for datos in self.get_productos()]
-        print("Lista de productos:")
+        print("""
+Lista de productos:
+===================""")
         i = 1
-        for producto in productos:
-            print(f"{i}) {producto}")
+        for prod in productos:
+            print(f"{i}) {prod}")
             i+=1
+
+
+
+    def seleccionar_producto(self, productos):
+        '''Selecciona un producto según su id'''
+
+        self.listar_productos(productos)
+        num = input("-> ")
+        if num.isdigit() and int(num) >= 1 and int(num) <= len(productos):
+            print("Se ha seleccionado un producto")
+            espera()
+            return productos[int(num)-1]
+        print("No se pudo seleccionar un producto")
+        espera()
 
 
 
@@ -378,11 +399,10 @@ Modificar direccion:
         '''Carga un producto de la db buscandolo por su nombre'''
 
         nombre = ("%" + input("Nombre: ") + "%")
-        resultados = self.db.get_productos_segun_nombre(nombre)
-        if resultados:
+        productos = self.db.get_productos_segun_nombre(nombre)
+        if productos:
             print("Se obtuvieron los siguientes resultados:")
-            for datos_producto in resultados:
-                print(datos_producto)
+            self.seleccionar_producto(productos)
 
 
 
@@ -391,29 +411,12 @@ Modificar direccion:
 
 
 
-
-
-    def seleccionar_producto(self):
-        '''Selecciona un producto según su id'''
-
-        print("Ingrese nº de producto:")
-        producto_id = input("-> ")
-        datos_producto = self.db.get_producto_segun_id(producto_id)
-        if datos_producto:
-            self.producto = Producto(*datos_producto)
-            print("Se ha seleccionado un producto")
-        else:
-            self.producto = None
-            print("No se pudo seleccionar un producto")
-        espera()
-
-
-
-    def agregar_al_carrito(self):
+    def agregar_al_carrito(self, producto):
         '''Muestra el producto en pantalla y permite agregar al carrito'''
 
-        carrito = Carrito(0, self.usuario.get_usuario_id(), self.producto.get_producto_id(), 0)
-        print(self.producto.ficha_producto())
+        carrito = Carrito(0, self.usuario.get_usuario_id(), producto.get_producto_id(), 0)
+        carrito.set_producto(producto)
+        print(producto.ficha_producto())
         print("¿Quiere agregar al carrito?")
         cant = input("Ingrese una cantidad para agregar: ")
         if carrito.set_cantidad(cant):
@@ -425,28 +428,16 @@ Modificar direccion:
 
 
 
-    def cargar_carrito(self):
-        '''Carga el carrito del usuario'''
-
-        carrito_crudo = self.db.get_carrito_segun_usuario_id(self.usuario.get_usuario_id())
-        lista_carrito = []
-        for datos in carrito_crudo:
-            carrito = Carrito(*datos)
-            datos_producto = self.db.get_producto_segun_id(carrito.get_producto_id())
-            carrito.set_producto(Producto(*datos_producto))
-            lista_carrito.append(carrito)
-        self.usuario.cargar_carrito(lista_carrito)
-
-
-
     def ver_carrito(self):
         '''Ver los productos que se encuentran en carritos'''
 
-        self.cargar_carrito()
+        limpiar_pantalla()
+        print(self.usuario.ficha_usuario())
         print("""
 Productos en carrito:
 =====================""")
         i=1
+        self.usuario.cargar_carrito(self.db.get_carrito_segun_usuario(self.usuario))
         for carrito in self.usuario.get_carrito():
             print(f"[{i}] {carrito}")
             i+=1
@@ -475,7 +466,7 @@ Productos en carrito:
 Opciones:
 =========
 [1] Comprar
-[2] Modificar
+[2] Modificar/Eliminar
 [x] Volver""")
         rta = input("->")
         if rta == "x":
@@ -496,10 +487,11 @@ Opciones:
         if rta.isdigit():
             if rta == "0":
                 self.db.eliminar_carrito(carrito)
-            elif carrito.set_cantidad(int(rta)):
+            elif carrito.set_cantidad(rta):
                 self.db.actualizar_carrito_cantidad(carrito)
             else:
                 print("No se pudo actualizar")
+        self.usuario.cargar_carrito(self.db.get_carrito_segun_usuario(self.usuario))
         espera()
 
 
@@ -515,8 +507,6 @@ Opciones:
         print("¿Quiere confirmar la compra de", compra, "?")
         if consiente_cambio():
             self.db.registrar_compra(compra)
-            carrito.get_producto().decr_stock(carrito.get_cantidad())
-            self.db.actualizar_producto_stock(carrito.get_producto())
             self.db.eliminar_carrito(carrito)
             print("Gracias por su compra!")
         else:
@@ -525,29 +515,19 @@ Opciones:
 
 
 
-    def cargar_compras(self, usuario):
-        '''Carga las compras del usuario'''
-
-        compras_cruda = self.db.get_compras_segun_usuario_id(usuario.get_usuario_id())
-        lista_compras = []
-        for datos in compras_cruda:
-            compra = Compra(*datos)
-            datos_productos = self.db.get_producto_segun_id(compra.get_producto_id())
-            compra.set_producto(Producto(*datos_productos))
-            lista_compras.append(compra)
-        self.usuario.cargar_compras(lista_compras)
-
-
-
     def ver_compras(self, usuario):
         '''Ve las compras realizadas por el usuario'''
 
-        self.cargar_compras(self.usuario)
+        limpiar_pantalla()
+        print(usuario.ficha_usuario())
         print("""
 Productos comprados:
 ====================""")
+        usuario.cargar_compras(self.db.get_compras_segun_usuario(usuario))
+        i=1
         for compra in usuario.get_compras():
-            print(compra)
+            print(f"{i}) {compra}")
+            i+=1
         input()
 
 
@@ -563,15 +543,21 @@ Productos comprados:
 Menu Administrador:
 ===================
 [1] Producto
-[2] Compras
+[2] Ver compras
+[3] Ver usuarios
 [x] Salir""")
             rta = input("-> ")
             if rta == "1":
                 self.menu_abcm_producto()
+            elif rta == "2":
+                for usuario in self.db.get_todos_los_usuarios():
+                    self.ver_compras(usuario)
+            elif rta == "3":
+                for usuario in self.db.get_todos_los_usuarios():
+                    print(usuario)
+                input()
             elif rta == "x":
                 return
-            elif rta == "2":
-                self.menu_consultas_compra()
 
 
 
@@ -580,28 +566,25 @@ Menu Administrador:
 
         while True:
             limpiar_pantalla()
-            print("""Que accion desea realizar:
+            print("""\
+Que accion desea realizar:
+==========================
 [1] Agregar producto
 [2] Modificar producto
 [3] Eliminar producto
-[4] Lista de productos
 [x] Volver""")
             rta = input("-> ")
             if rta == "x":
                 return
             elif rta == "1":
                 self.registrar_producto()
-            elif rta == "4":
-                self.listar_productos()
-                input()
-            else:
-                self.listar_productos()
-                self.seleccionar_producto()
+            elif rta == "2" or rta == "3":
+                self.producto = self.seleccionar_producto(self.db.get_todos_los_productos())
                 if self.producto:
-                    if rta == "3":
-                        self.eliminar_producto()
-                    elif rta == "2":
+                    if rta == "2":
                         self.menu_modificar_producto()
+                    else:
+                        self.eliminar_producto()
 
 
 
@@ -711,10 +694,3 @@ Menu Producto:
         else:
             print("-cambios descartados-")
         espera()
-
-
-
-    def menu_consultas(self):
-        '''Permite consultar compras'''
-
-        

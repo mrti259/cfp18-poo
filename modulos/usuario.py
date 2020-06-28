@@ -1,5 +1,5 @@
 from .extras import fecha_a_string
-from .validador import *
+from .validador import valida_dni, valida_email, valida_telefono
 
 class Usuario:
 
@@ -48,10 +48,8 @@ Fecha de registro: {self.get_fecha_de_registro()}
 
 
     def set_usuario_id(self, usuario_id):
-        if valida_id(usuario_id):
-            self.usuario_id = usuario_id
-            return 1
-        print("La id no es válida")
+        self.usuario_id = usuario_id
+        return 1
 
     def get_usuario_id(self):
         return self.usuario_id

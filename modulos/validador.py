@@ -1,5 +1,4 @@
 from validate_email import validate_email
-from validate_email import validate_email
 
 '''Funciones que controlan la validez de los datos'''
 def valida_nombre(nombre):
@@ -11,8 +10,8 @@ def valida_precio(precio):
 def valida_stock(stock):
     return str(stock).isdigit()
 
-def valida_id(ID):
-    return str(ID).isdigit()
+def valida_cantidad(cantidad, producto):
+    return str(cantidad).isdigit() and int(cantidad) > 0 and int(cantidad) <= producto.get_stock()
 
 def valida_clave_segura(clave):
     return len(clave) >= 8 and any(char.islower() for char in clave) and any(char.isupper() for char in clave) and any(char.isdigit() for char in clave)

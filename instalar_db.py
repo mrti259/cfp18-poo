@@ -1,6 +1,6 @@
 import mysql.connector
 
-sql_script = "ecommerce_final.sql"
+sql_script = input("Ingrese archivo: ")
 database = "ecommerce_final"
 user = input("Ingrese administrador: ")
 passwd = input("Ingrese contraseña: ")

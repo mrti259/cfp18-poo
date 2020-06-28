@@ -6,7 +6,7 @@ class Categoria:
 
 
     def __str__(self):
-        return (f"({self.get_categoria_id()}) {self.get_nombre()}")
+        return (self.get_nombre())
 
 
 

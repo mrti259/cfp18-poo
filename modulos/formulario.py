@@ -1,12 +1,7 @@
 from datetime import date, datetime
-from .categoria import Categoria
-from .ciudad import Ciudad
 from .direccion import Direccion
 from .extras import *
-from .marca import Marca
-from .pais import Pais
 from .producto import Producto
-from .provincia import Provincia
 from .usuario import Usuario
 
 class Formulario:
@@ -16,8 +11,8 @@ class Formulario:
         self.ahora = datetime.now
         self.hoy = date.today
         self.get_paises = db.get_todos_los_paises
-        self.get_provincias_segun_pais_id = db.get_provincias_segun_pais_id
-        self.get_ciudades_segun_provincia_id = db.get_ciudades_segun_provincia_id
+        self.get_provincias_segun_pais = db.get_provincias_segun_pais
+        self.get_ciudades_segun_provincia = db.get_ciudades_segun_provincia
         self.get_marcas = db.get_todas_las_marcas
         self.get_categorias = db.get_todas_las_categorias
 
@@ -28,7 +23,7 @@ class Formulario:
 
         i = 1
         for opcion in lista:
-            print(f"[{i}] {opcion}")
+            print(f"{i}) {opcion}")
             i+=1
 
 
@@ -48,8 +43,6 @@ class Formulario:
         '''Formulario que se mostrara cuando se desee crear un nuevo producto'''
 
         producto = Producto()
-        categorias = [Categoria(*datos) for datos in self.get_categorias()]
-        marcas = [Marca(*datos) for datos in self.get_marcas()]
         modificadores = {
             "Nombre": producto.set_nombre,
             "Descripcion": producto.set_descripcion,
@@ -62,8 +55,8 @@ class Formulario:
             dato = input("->" + campo + ": ")
             while not setter(dato):
                 dato = input("->" + campo + ": ")
-        producto.set_categoria(self.seleccionar(categorias))
-        producto.set_marca(self.seleccionar(marcas))
+        producto.set_categoria(self.seleccionar(self.get_categorias()))
+        producto.set_marca(self.seleccionar(self.get_marcas()))
         producto.set_fecha_de_publicacion(self.ahora())
         producto.set_fecha_de_ultima_modificacion(self.ahora())
         limpiar_pantalla()
@@ -123,12 +116,9 @@ class Formulario:
             dato = input("-> " + campo + ": ")
             while not setter(dato):
                 dato = input("-> " + campo + ": ")
-        paises = [Pais(*datos) for datos in self.get_paises()]
-        pais = self.seleccionar(paises)
-        provincias = [Provincia(*datos) for datos in self.get_provincias_segun_pais_id(pais.get_pais_id())]
-        provincia = self.seleccionar(provincias)
-        ciudades = [Ciudad(*datos) for datos in self.get_ciudades_segun_provincia_id(provincia.get_provincia_id())]
-        ciudad = self.seleccionar(ciudades)
+        pais = self.seleccionar(self.get_paises())
+        provincia = self.seleccionar(self.get_provincias_segun_pais(pais))
+        ciudad = self.seleccionar(self.get_ciudades_segun_provincia(provincia))
         direccion.set_ciudad(ciudad)
         limpiar_pantalla()
         print(direccion.ficha_direccion())

@@ -3,6 +3,7 @@ class Ciudad:
         self.ciudad_id = ciudad_id
         self.nombre = nombre
         self.provincia_id = provincia_id
+        self.provincia = None
 
 
 
@@ -35,3 +36,13 @@ class Ciudad:
 
     def get_provincia_id(self):
         return self.provincia_id
+
+
+
+    def set_provincia(self, provincia):
+        self.provincia = provincia
+        self.set_provincia_id(provincia.get_provincia_id())
+        return 1
+
+    def get_provincia(self):
+        return self.provincia

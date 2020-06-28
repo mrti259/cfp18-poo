@@ -22,7 +22,7 @@ class Producto:
     def __str__(self):
         '''Da formato al objeto para ser pasado como cadena'''
 
-        return (f"{self.get_nombre()} {self.get_marca()} ($ {self.get_precio()} /u.)")
+        return (f"{self.get_nombre()} ($ {self.get_precio()} /u.)")
 
 
 
@@ -45,10 +45,8 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
 
 
     def set_producto_id(self, producto_id):
-        if valida_id(producto_id):
-            self.producto_id = producto_id
-            return 1
-        print("La id no es correcta")
+        self.producto_id = producto_id
+        return 1
 
     def get_producto_id(self):
         return self.producto_id
@@ -79,14 +77,12 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
         print("El stock no es válido")
 
     def incr_stock(self, incr):
-        if valida_stock:
-            self.stock += int(incr)
-            return 1
+        self.stock += int(incr)
+        return 1
 
     def decr_stock(self, decr):
-        if valida_stock and int(decr) > self.stock:
-            self.stock -= int(decr)
-            return 1
+        self.stock -= int(decr)
+        return 1
 
     def get_stock(self):
         return self.stock
@@ -103,20 +99,16 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
 
 
     def set_categoria_id(self, categoria_id):
-        if valida_id(categoria_id):
-            self.categoria_id = categoria_id
-            return 1
-        print("La id de categoría no es correcta")
+        self.categoria_id = categoria_id
+        return 1
 
     def get_categoria_id(self):
         return self.categoria_id
 
 
     def set_marca_id(self, marca_id):
-        if valida_id(marca_id):
-            self.marca_id = marca_id
-            return 1
-        print("La id de marca no es correcta")
+        self.marca_id = marca_id
+        return 1
 
     def get_marca_id(self):
         return self.marca_id

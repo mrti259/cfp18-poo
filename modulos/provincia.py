@@ -3,6 +3,7 @@ class Provincia:
         self.provincia_id = provincia_id
         self.nombre = nombre
         self.pais_id = pais_id
+        self.pais = None
 
 
 
@@ -33,5 +34,15 @@ class Provincia:
         self.pais_id = pais_id
         return 1
 
-        def get_pais_id(self):
-            return self.pais_id
+    def get_pais_id(self):
+        return self.pais_id
+
+
+
+    def set_pais(self, pais):
+        self.pais = pais
+        self.set_pais_id(pais.get_pais_id())
+        return 1
+
+    def get_pais(self):
+        return self.pais
