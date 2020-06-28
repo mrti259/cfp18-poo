@@ -22,7 +22,7 @@ class Producto:
     def __str__(self):
         '''Da formato al objeto para ser pasado como cadena'''
 
-        return (f"{self.get_producto_id()}. {self.get_nombre()} ({self.get_precio()})")
+        return (f"{self.get_nombre()} {self.get_marca()} ($ {self.get_precio()} /u.)")
 
 
 
@@ -84,7 +84,7 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
             return 1
 
     def decr_stock(self, decr):
-        if valida_stock and int(incr) > self.stock:
+        if valida_stock and int(decr) > self.stock:
             self.stock -= int(decr)
             return 1
 
@@ -124,6 +124,7 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
 
     def set_categoria(self, categoria):
         self.categoria = categoria
+        self.categoria_id = categoria.get_categoria_id()
         return 1
 
     def get_categoria(self):
@@ -131,7 +132,8 @@ Fecha de ultima modificacion: {self.get_fecha_de_ultima_modificacion()}
 
 
     def set_marca(self, marca):
-        self.marca_id = marca
+        self.marca = marca
+        self.marca_id = marca.get_marca_id()
         return 1
 
     def get_marca(self):

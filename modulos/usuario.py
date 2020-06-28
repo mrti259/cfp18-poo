@@ -17,7 +17,7 @@ class Usuario:
         self.telefono = telefono
         self.direccion_id = direccion_id
         self.fecha_de_registro = fecha_de_registro
-        self.direccion = ""
+        self.direccion = None
         self.compras = []
         self.carrito = []
 
@@ -26,7 +26,7 @@ class Usuario:
     def __str__(self):
         '''Da formato a un usuario para ser pasado como cadena'''
 
-        return (f"{self.get_usuario_id()}. {self.get_email()}")
+        return (f"{self.get_email()} | {self.get_nombre()} {self.get_apellido()}")
 
 
 
@@ -119,11 +119,9 @@ Fecha de registro: {self.get_fecha_de_registro()}
         return self.telefono
 
 
-    def set_direccion_id(self, direccion_id):
-        if valida_id(direccion_id):
-            self.direccion_id = direccion_id
-            return 1
-        print("La id no es válida")
+    def set_direccion_id(self, direccion):
+        self.direccion_id = direccion.get_direccion_id()
+        return 1
 
     def get_direccion_id(self):
         return self.direccion_id
@@ -139,6 +137,7 @@ Fecha de registro: {self.get_fecha_de_registro()}
 
     def set_direccion(self, direccion):
         self.direccion = direccion
+        self.set_direccion_id(direccion)
         return 1
 
     def get_direccion(self):
@@ -146,7 +145,7 @@ Fecha de registro: {self.get_fecha_de_registro()}
 
 
     def cargar_compras(self, lista_compras):
-        self.compras.concat(lista_compras)
+        self.compras = lista_compras
         return 1
 
     def get_compras(self):
@@ -154,7 +153,7 @@ Fecha de registro: {self.get_fecha_de_registro()}
 
 
     def cargar_carrito(self, lista_carrito):
-        self.carrito.concat(lista_carrito)
+        self.carrito = lista_carrito
         return 1
 
     def get_carrito(self):

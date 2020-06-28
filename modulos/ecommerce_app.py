@@ -1,5 +1,8 @@
+from datetime import datetime
 from .carrito import Carrito
+from .compra import Compra
 from .categoria import Categoria
+from .direccion import Direccion
 from .ecommerce_db import Ecommerce_db
 from .extras import *
 from .formulario import Formulario
@@ -81,6 +84,8 @@ class Ecommerce_app:
             if valida_clave_correcta(clave, datos_db[0]):
                 datos_usuario = self.db.get_usuario_segun_id(datos_db[1])
                 self.usuario = Usuario(*datos_usuario)
+                direccion = Direccion(*self.db.get_direccion_segun_id(self.usuario.get_direccion_id()))
+                self.usuario.set_direccion(direccion)
                 print("Inicio de sesión exitoso")
             else:
                 print("Contraseña incorrecta")
@@ -100,6 +105,7 @@ class Ecommerce_app:
             print("Ese email ya se encuentra registrado!")
         else:
             self.db.registrar_direccion(usuario.get_direccion())
+            usuario.set_direccion_id(usuario.get_direccion())
             self.db.registrar_usuario(usuario)
             print("Usuario registrado!")
         espera()
@@ -132,7 +138,8 @@ class Ecommerce_app:
             print("""Menu Usuario
 [1] Configuracion perfil
 [2] Ver catálogo
-[3] Ver carrito
+[3] Ver carrito/Comprar
+[4] Ver compras
 [x] Cerrar sesión""")
             rta = input("-> ")
             if rta == "1":
@@ -140,10 +147,13 @@ class Ecommerce_app:
             elif rta == "2":
                 self.menu_catalogo()
             elif rta == "3":
-                self.menu_carrito()
+                producto_en_carrito = self.seleccionar_carrito()
+                if producto_en_carrito:
+                    self.opciones_carrito(producto_en_carrito)
+            elif rta == "4":
+                self.ver_compras(self.usuario)
             elif rta == "x":
                 self.usuario = None
-                return
 
 
 
@@ -295,7 +305,7 @@ Modificar direccion:
                 return
             elif rta == "1":
                 direccion = self.registrar_direccion()
-                self.usuario.set_direccion_id(direccion.get_direccion_id())
+                self.usuario.set_direccion(direccion)
                 self.db.actualizar_usuario_direccion_id(self.usuario)
 
 
@@ -308,7 +318,7 @@ Modificar direccion:
         direccion = self.formulario.nueva_direccion()
         self.db.registrar_direccion(direccion)
         print("Direccion registrada!")
-        input()
+        espera()
         return(direccion)
 
 
@@ -335,15 +345,19 @@ Modificar direccion:
 [3] Filtrar
 [x] Volver""")
             rta = input("-> ")
-            if rta == "1":
+            if rta == "x":
+                return
+            elif rta == "1":
                 self.listar_productos()
                 self.seleccionar_producto()
-            if rta == "2":
+            elif rta == "2":
                 self.buscar_productos_por_nombre()
-            if rta == "3":
+                self.seleccionar_producto()
+            elif rta == "3":
                 self.filtrar_productos()
-            elif rta == "x":
-                return
+                self.seleccionar_producto()
+            if self.producto:
+                self.agregar_al_carrito()
 
 
 
@@ -353,25 +367,10 @@ Modificar direccion:
         limpiar_pantalla()
         productos = [Producto(*datos) for datos in self.get_productos()]
         print("Lista de productos:")
+        i = 1
         for producto in productos:
-            print(producto)
-
-
-
-    def seleccionar_producto(self):
-        '''Selecciona un producto según su id'''
-
-        print("Ingrese nº de producto:")
-        producto_id = input("-> ")
-        datos_producto = self.db.get_producto_segun_id(producto_id)
-        if datos_producto:
-            self.producto = Producto(*datos_producto)
-            print(self.producto.ficha_producto())
-        else:
-            self.producto = None
-            print("No se pudo seleccionar un producto")
-        espera()
-
+            print(f"{i}) {producto}")
+            i+=1
 
 
 
@@ -384,60 +383,172 @@ Modificar direccion:
             print("Se obtuvieron los siguientes resultados:")
             for datos_producto in resultados:
                 print(datos_producto)
-            print("Si busca uno de los siguientes productos, ingrese su id: ")
-            producto_id = int(input("Id: "))
-            for datos in resultados:
-                if producto_id == datos[0]:
-                    self.producto = Producto(*datos)
-                    print("Producto seleccionado")
-        if not self.producto:
-            print("No se ha seleccionado ningun producto")
-        espera()
 
 
 
     def filtrar_productos(self):
-        '''Trae la listra de produtos filtrada'''
+        '''Filtra los productos por marca o categoria'''
 
 
 
 
 
-    def menu_carrito(self):
-        '''Permite modificar los productos que se encuentran en carritos y realizar la compra'''
+    def seleccionar_producto(self):
+        '''Selecciona un producto según su id'''
 
-        while self.usuario:
-            limpiar_pantalla()
-            input()
-            return
+        print("Ingrese nº de producto:")
+        producto_id = input("-> ")
+        datos_producto = self.db.get_producto_segun_id(producto_id)
+        if datos_producto:
+            self.producto = Producto(*datos_producto)
+            print("Se ha seleccionado un producto")
+        else:
+            self.producto = None
+            print("No se pudo seleccionar un producto")
+        espera()
+
+
+
+    def agregar_al_carrito(self):
+        '''Muestra el producto en pantalla y permite agregar al carrito'''
+
+        carrito = Carrito(0, self.usuario.get_usuario_id(), self.producto.get_producto_id(), 0)
+        print(self.producto.ficha_producto())
+        print("¿Quiere agregar al carrito?")
+        cant = input("Ingrese una cantidad para agregar: ")
+        if carrito.set_cantidad(cant):
+            print("Se ha añadido al carrito correctamente.")
+            self.db.registrar_carrito(carrito)
+        else:
+            print("No se ha añadido al carrito.")
+        espera()
+
+
+
+    def cargar_carrito(self):
+        '''Carga el carrito del usuario'''
+
+        carrito_crudo = self.db.get_carrito_segun_usuario_id(self.usuario.get_usuario_id())
+        lista_carrito = []
+        for datos in carrito_crudo:
+            carrito = Carrito(*datos)
+            datos_producto = self.db.get_producto_segun_id(carrito.get_producto_id())
+            carrito.set_producto(Producto(*datos_producto))
+            lista_carrito.append(carrito)
+        self.usuario.cargar_carrito(lista_carrito)
 
 
 
     def ver_carrito(self):
         '''Ver los productos que se encuentran en carritos'''
 
-        while self.usuario:
-            limpiar_pantalla()
-            print(self.usuario)
-            print("Carrito de compras:")
-            for carrito in self.usuario.get_carrito():
-                print(carrito)
-            input()
+        self.cargar_carrito()
+        print("""
+Productos en carrito:
+=====================""")
+        i=1
+        for carrito in self.usuario.get_carrito():
+            print(f"[{i}] {carrito}")
+            i+=1
+
+
+
+    def seleccionar_carrito(self):
+        '''Selecciona alguno de los productos que se encuentre en el carrito del usuario'''
+
+        self.ver_carrito()
+        carrito = self.usuario.get_carrito()
+        num = input("Ingrese nº para modificar/comprar: ")
+        if not num.isdigit():
+            num = -1
+        elif int(num) >= 1 and int(num) <= len(carrito):
+            return carrito[int(num)-1]
+        print("No se ha seleccionado ningún producto.")
+        espera()
+
+
+
+    def opciones_carrito(self, carrito):
+        '''Permite comprar o modificar un producto seleccionado en el carrito del usuario'''
+
+        print("""
+Opciones:
+=========
+[1] Comprar
+[2] Modificar
+[x] Volver""")
+        rta = input("->")
+        if rta == "x":
             return
+        elif rta == "1":
+            self.comprar(carrito)
+        elif rta == "2":
+            self.modificar_carrito(carrito)
 
 
 
-    def ver_compras(self):
+    def modificar_carrito(self, carrito):
+        '''Permite modificar los productos que se encuentran en carritos'''
+
+        print(carrito)
+        print("Ingrese una nueva cantidad para modificar, 0 para eliminar: ")
+        rta = input("Cant:")
+        if rta.isdigit():
+            if rta == "0":
+                self.db.eliminar_carrito(carrito)
+            elif carrito.set_cantidad(int(rta)):
+                self.db.actualizar_carrito_cantidad(carrito)
+            else:
+                print("No se pudo actualizar")
+        espera()
+
+
+
+    def comprar(self, carrito):
+        '''Registra la compra'''
+
+        precio = carrito.producto.get_precio() * carrito.get_cantidad()
+        compra = Compra(0, self.usuario.get_usuario_id(), self.usuario.get_direccion_id(), carrito.get_producto_id(), carrito.get_cantidad(), precio, datetime.now())
+        compra.set_producto(carrito.get_producto())
+        print("La compra se enviará a", self.usuario.get_direccion())
+        print("Actualice su perfil para modificar esto\n")
+        print("¿Quiere confirmar la compra de", compra, "?")
+        if consiente_cambio():
+            self.db.registrar_compra(compra)
+            carrito.get_producto().decr_stock(carrito.get_cantidad())
+            self.db.actualizar_producto_stock(carrito.get_producto())
+            self.db.eliminar_carrito(carrito)
+            print("Gracias por su compra!")
+        else:
+            print("El producto va a permanecer en el carrito")
+        espera()
+
+
+
+    def cargar_compras(self, usuario):
+        '''Carga las compras del usuario'''
+
+        compras_cruda = self.db.get_compras_segun_usuario_id(usuario.get_usuario_id())
+        lista_compras = []
+        for datos in compras_cruda:
+            compra = Compra(*datos)
+            datos_productos = self.db.get_producto_segun_id(compra.get_producto_id())
+            compra.set_producto(Producto(*datos_productos))
+            lista_compras.append(compra)
+        self.usuario.cargar_compras(lista_compras)
+
+
+
+    def ver_compras(self, usuario):
         '''Ve las compras realizadas por el usuario'''
 
-        while self.usuario:
-            limpiar_pantalla()
-            print(self.usuario)
-            print("Compras:")
-            for compras in self.usuario.get_compras():
-                print(compras)
-            input()
-            return
+        self.cargar_compras(self.usuario)
+        print("""
+Productos comprados:
+====================""")
+        for compra in usuario.get_compras():
+            print(compra)
+        input()
 
 
 
@@ -452,16 +563,15 @@ Modificar direccion:
 Menu Administrador:
 ===================
 [1] Producto
-[2] Marca
-[3] Categoria
-[4] Compra
-[5] Usuarios
+[2] Compras
 [x] Salir""")
             rta = input("-> ")
             if rta == "1":
                 self.menu_abcm_producto()
-            if rta == "x":
+            elif rta == "x":
                 return
+            elif rta == "2":
+                self.menu_consultas_compra()
 
 
 
@@ -532,13 +642,11 @@ Menu Producto:
 [2] Modificar descripcion
 [3] Modificar precio
 [4] Modificar stock
-[5] Modificar marca
-[6] Modificar categoria
 [x] Volver
 """)
             rta = input("->")
             if rta == "x":
-                return
+                self.producto = None
             elif rta == "1":
                 self.modificar_nombre_producto()
             elif rta == "2":
@@ -547,15 +655,11 @@ Menu Producto:
                 self.modificar_precio()
             elif rta == "4":
                 self.modificar_stock()
-            elif rta == "5":
-                self.modificar_marca()
-            elif rta == "6":
-                self.modificar_categoria()
 
 
 
     def modificar_nombre_producto(self):
-        ''' '''
+        '''Modifica el nombre de un producto'''
 
         nombre = input("Nuevo nombre: ")
         if consiente_cambio() and self.producto.set_nombre(nombre):
@@ -569,7 +673,7 @@ Menu Producto:
 
 
     def modificar_descripcion(self):
-        ''' '''
+        '''Modifica la descripcion de un producto'''
 
         descripcion = input("Nueva descripcion: ")
         if consiente_cambio() and self.producto.set_descripcion(descripcion):
@@ -583,7 +687,7 @@ Menu Producto:
 
 
     def modificar_precio(self):
-        ''' '''
+        '''Modifica el precio de un producto'''
 
         precio = float(input("Nuevo precio: "))
         if consiente_cambio() and self.producto.set_precio(precio):
@@ -597,7 +701,7 @@ Menu Producto:
 
 
     def modificar_stock(self):
-        ''' '''
+        '''Modifica el stock de un producto'''
 
         stock = input("Nuevo stock: ")
         if consiente_cambio() and producto.set_stock(stock):
@@ -610,10 +714,7 @@ Menu Producto:
 
 
 
-    def modificar_marca(self):
-        ''' '''
+    def menu_consultas(self):
+        '''Permite consultar compras'''
 
-
-
-    def modificar_categoria(self):
-        ''' '''
+        

@@ -7,7 +7,7 @@ class Ciudad:
 
 
     def __str__(self):
-        return (f"({self.get_provincia_id()}) {self.get_nombre()}")
+        return (self.get_nombre())
 
 
 

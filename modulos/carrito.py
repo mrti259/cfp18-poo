@@ -1,16 +1,16 @@
 class Carrito:
     def __init__(self, carrito_id, usuario_id, producto_id, cantidad):
-        self.set_carrito_id(carrito_id)
-        self.set_usuario_id(usuario_id)
-        self.set_producto_id(producto_id)
-        self.set_cantidad(cantidad)
+        self.carrito_id = carrito_id
+        self.usuario_id = usuario_id
+        self.producto_id = producto_id
+        self.cantidad = cantidad
         self.producto = None
         self.usuario = None
 
 
 
     def __str__(self):
-        return (f"id. {self.get_carrito_id()} {self.usuario}")
+        return (f"{self.get_producto()} Cant: {self.get_cantidad()}")
 
 
 
@@ -47,3 +47,12 @@ class Carrito:
 
     def get_cantidad(self):
         return self.cantidad
+
+
+
+    def set_producto(self, producto):
+        self.producto = producto
+        return 1
+
+    def get_producto(self):
+        return self.producto

@@ -25,16 +25,16 @@
 - [x] Baja usuario
 - [x] Modificacion usuario
 - [x] Alta productos
-- [ ] Baja productos
-- [ ] Modificacion productos
+- [x] Baja productos
+- [x] Modificacion productos
 - [x] Alta direccion
 - [ ] Baja direccion
-- [ ] Modificacion direccion
-- [ ] Alta carrito
+- [x] Modificacion direccion
+- [x] Alta carrito
 - [ ] Baja carrito
 - [ ] Modificacion carrito
-- [ ] Registro compras
-- [ ] Consultas compras
+- [x] Registro compras
+- [x] Consultas compras
 - [ ] Consultas productos
 
 **Flask:**

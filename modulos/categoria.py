@@ -1,12 +1,12 @@
 class Categoria:
     def __init__(self,categoria_id,nombre):
-        self.set_categoria_id(categoria_id)
-        self.set_nombre(nombre)
+        self.categoria_id = categoria_id
+        self.nombre = nombre
 
 
 
     def __str__(self):
-        return (f"[{self.get_categoria_id()}] {self.get_nombre()}")
+        return (f"({self.get_categoria_id()}) {self.get_nombre()}")
 
 
 

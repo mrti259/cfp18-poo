@@ -23,11 +23,24 @@ class Formulario:
 
 
 
-    def listar_opciones(self, opciones):
-        '''Despliega las opciones disponibles para un campo'''
+    def listar(self, lista):
+        '''Despliega la lista de opciones disponibles para un campo'''
 
-        for o in opciones:
-            print(o)
+        i = 1
+        for opcion in lista:
+            print(f"[{i}] {opcion}")
+            i+=1
+
+
+
+    def seleccionar(self, lista):
+        """Devuelve uno de los objetos de la lista"""
+
+        self.listar(lista)
+        opc = input("-> ")
+        if opc.isdigit() and int(opc) >= 0 and int(opc) <= len(lista):
+            return lista[int(opc)-1]
+        return self.seleccionar
 
 
 
@@ -35,28 +48,22 @@ class Formulario:
         '''Formulario que se mostrara cuando se desee crear un nuevo producto'''
 
         producto = Producto()
-        marcas = [Marca(*datos) for datos in self.get_marcas()]
         categorias = [Categoria(*datos) for datos in self.get_categorias()]
+        marcas = [Marca(*datos) for datos in self.get_marcas()]
         modificadores = {
             "Nombre": producto.set_nombre,
             "Descripcion": producto.set_descripcion,
             "Precio": producto.set_precio,
             "Stock": producto.set_stock,
-            "Marca": producto.set_marca_id,
-            "Categoria": producto.set_categoria_id,
         }
         for campo, setter in modificadores.items():
             limpiar_pantalla()
             print(producto.ficha_producto())
-            if campo == "Marca":
-                print("Marcas registradas:")
-                self.listar_opciones(marcas)
-            elif campo == "Categoria":
-                print("Categorias disponibles:")
-                self.listar_opciones(categorias)
             dato = input("->" + campo + ": ")
             while not setter(dato):
                 dato = input("->" + campo + ": ")
+        producto.set_categoria(self.seleccionar(categorias))
+        producto.set_marca(self.seleccionar(marcas))
         producto.set_fecha_de_publicacion(self.ahora())
         producto.set_fecha_de_ultima_modificacion(self.ahora())
         limpiar_pantalla()
@@ -78,7 +85,6 @@ class Formulario:
             "Fecha de nacimiento": usuario.set_fecha_de_nacimiento,
             "DNI": usuario.set_dni,
             "Telefono": usuario.set_telefono,
-            "Direccion": usuario.set_direccion_id,
         }
         for campo, setter in modificadores.items():
             limpiar_pantalla()
@@ -89,14 +95,11 @@ class Formulario:
                 print("-> " + campo + ":")
                 fecha = ingresar_fecha()
                 setter(fecha)
-            elif campo == "Direccion":
-                direccion = self.nueva_direccion()
-                setter(direccion.get_direccion_id())
-                usuario.set_direccion(direccion)
             else:
                 dato = input("->" + campo + ": ")
                 while not setter(dato):
                     dato = input("->" + campo + ": ")
+        usuario.set_direccion(self.nueva_direccion())
         usuario.set_fecha_de_registro(self.ahora())
         limpiar_pantalla()
         print(usuario.ficha_usuario())
@@ -113,28 +116,20 @@ class Formulario:
             "Calle": direccion.set_calle,
             "Altura": direccion.set_altura,
             "Codigo postal": direccion.set_codigo_postal,
-            "Pais": direccion.set_pais_id,
-            "Provincia": direccion.set_provincia_id,
-            "Ciudad": direccion.set_ciudad_id,
         }
         for campo, setter in modificadores.items():
             limpiar_pantalla()
             print(direccion.ficha_direccion())
-            if campo == "Pais":
-                paises = [Pais(*datos) for datos in self.get_paises()]
-                print("Paises disponibles:")
-                self.listar_opciones(paises)
-            elif campo == "Provincia":
-                provincias = [Provincia(*datos) for datos in self.get_provincias_segun_pais_id(direccion.get_pais_id())]
-                print("Provincias disponibles:")
-                self.listar_opciones(provincias)
-            elif campo == "Ciudad":
-                ciudades = [Ciudad(*datos) for datos in self.get_ciudades_segun_provincia_id(direccion.get_provincia_id())]
-                print("Ciudades disponibles:")
-                self.listar_opciones(ciudades)    
             dato = input("-> " + campo + ": ")
             while not setter(dato):
                 dato = input("-> " + campo + ": ")
+        paises = [Pais(*datos) for datos in self.get_paises()]
+        pais = self.seleccionar(paises)
+        provincias = [Provincia(*datos) for datos in self.get_provincias_segun_pais_id(pais.get_pais_id())]
+        provincia = self.seleccionar(provincias)
+        ciudades = [Ciudad(*datos) for datos in self.get_ciudades_segun_provincia_id(provincia.get_provincia_id())]
+        ciudad = self.seleccionar(ciudades)
+        direccion.set_ciudad(ciudad)
         limpiar_pantalla()
         print(direccion.ficha_direccion())
         input("-> Enviar")

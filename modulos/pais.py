@@ -6,7 +6,7 @@ class Pais:
 
 
     def __str__(self):
-        return (f"({self.get_pais_id()}) {self.get_nombre()}")
+        return (self.get_nombre())
 
 
 

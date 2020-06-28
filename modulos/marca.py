@@ -5,7 +5,7 @@ class Marca:
 
 
     def __str__(self):
-        return (f"[{self.get_marca_id()}] {self.get_nombre()}")
+        return (f"({self.get_marca_id}) {self.get_nombre()}")
 
 
 
