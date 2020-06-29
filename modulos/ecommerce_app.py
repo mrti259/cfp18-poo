@@ -416,6 +416,7 @@ Lista de productos:
 
         carrito = Carrito(0, self.usuario.get_usuario_id(), producto.get_producto_id(), 0)
         carrito.set_producto(producto)
+        limpiar_pantalla()
         print(producto.ficha_producto())
         print("¿Quiere agregar al carrito?")
         cant = input("Ingrese una cantidad para agregar: ")
@@ -491,7 +492,6 @@ Opciones:
                 self.db.actualizar_carrito_cantidad(carrito)
             else:
                 print("No se pudo actualizar")
-        self.usuario.cargar_carrito(self.db.get_carrito_segun_usuario(self.usuario))
         espera()
 
 
@@ -499,14 +499,18 @@ Opciones:
     def comprar(self, carrito):
         '''Registra la compra'''
 
-        precio = carrito.producto.get_precio() * carrito.get_cantidad()
+        producto = carrito.get_producto()
+        precio = producto.get_precio() * carrito.get_cantidad()
         compra = Compra(0, self.usuario.get_usuario_id(), self.usuario.get_direccion_id(), carrito.get_producto_id(), carrito.get_cantidad(), precio, datetime.now())
-        compra.set_producto(carrito.get_producto())
+        compra.set_producto(producto)
+        limpiar_pantalla()
+        print(producto.ficha_producto())
         print("La compra se enviará a", self.usuario.get_direccion())
         print("Actualice su perfil para modificar esto\n")
         print("¿Quiere confirmar la compra de", compra, "?")
         if consiente_cambio():
             self.db.registrar_compra(compra)
+            self.db.actualizar_producto_stock(compra.get_producto())
             self.db.eliminar_carrito(carrito)
             print("Gracias por su compra!")
         else:
@@ -542,9 +546,10 @@ Productos comprados:
             print("""\
 Menu Administrador:
 ===================
-[1] Producto
-[2] Ver compras
+[1] ABM Producto
+[2] Ver ventas
 [3] Ver usuarios
+[4] Ver totales
 [x] Salir""")
             rta = input("-> ")
             if rta == "1":
@@ -556,6 +561,8 @@ Menu Administrador:
                 for usuario in self.db.get_todos_los_usuarios():
                     print(usuario)
                 input()
+            elif rta == "4":
+                self.ver_totales()
             elif rta == "x":
                 return
 
@@ -694,3 +701,14 @@ Menu Producto:
         else:
             print("-cambios descartados-")
         espera()
+
+
+
+    def ver_totales(self):
+        """Muestra totales"""
+
+        print()
+        print("Usuarios registrados: ", self.db.total_usuarios())
+        print("Ventas realizadas: ", self.db.total_ventas())
+        print("Ingresos: ", self.db.total_ingresos())
+        input()

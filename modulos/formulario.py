@@ -35,7 +35,7 @@ class Formulario:
         opc = input("-> ")
         if opc.isdigit() and int(opc) >= 0 and int(opc) <= len(lista):
             return lista[int(opc)-1]
-        return self.seleccionar
+        return self.seleccionar(lista)
 
 
 

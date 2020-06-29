@@ -1,4 +1,4 @@
-from modulos import Ecommerce_app, Ecommerce_db, Formulario
+from modulos import Ecommerce_app
 from dbconf import dbconf
 
 app = Ecommerce_app(dbconf)

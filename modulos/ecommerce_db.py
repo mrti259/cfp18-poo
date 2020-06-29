@@ -19,6 +19,21 @@ class Ecommerce_db:
         self.cursor = self.conexion.cursor()
 
 
+    def total_usuarios(self):
+        self.cursor.execute(queries["total_usuarios"])
+        return self.cursor.fetchone()[0]
+
+
+    def total_ventas(self):
+        self.cursor.execute(queries["total_ventas"])
+        return self.cursor.fetchone()[0]
+
+
+    def total_ingresos(self):
+        self.cursor.execute(queries["total_ingresos"])
+        return self.cursor.fetchone()[0]
+
+
 
     def get_todos_los_paises(self):
         self.cursor.execute(queries["select_paises"])
@@ -202,7 +217,6 @@ class Ecommerce_db:
         self.cursor.execute(queries["insert_compra"], val)
         self.conexion.commit()
         compra.set_compra_id(self.cursor.lastrowid)
-        self.actualizar_producto_stock(compra.get_producto())
 
 
 
