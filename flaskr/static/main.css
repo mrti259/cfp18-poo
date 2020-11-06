@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+body {
+    background: rgb(200,200,255);
+}
+
+.navbar, .panel .panel-heading, .btn-primary {
+    background: rgb(82, 88, 180);
+    font-weight: bold;
+}
+
+.navbar-brand, .navbar-nav > li > a, .panel-heading {
+    color: lightcyan!important;
+}
+
+.jumbotron {
+  background-image: linear-gradient(to right,
+   rgb(150,150,255),
+   rgb(100,100,255),
+   rgb(150,150,255)
+   );
+   font-family: 'Fredoka One', cursive;
+   color: white;
+   text-shadow: 2px 2px 2px darkslategray;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}

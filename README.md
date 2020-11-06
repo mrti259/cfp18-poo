@@ -1,3 +1,7 @@
+<details>
+<summmary>
+Development
+</summary>
 **Dependencias:**
 - Python3
 - MySQL
@@ -46,3 +50,4 @@
 - [x] validate_email (necesita py3dns)
 - [x] getpass
 - [x] flask < crear virtualenv (excluido de git x si genera problemas de compatibilidad en windows y linux)
+</details>

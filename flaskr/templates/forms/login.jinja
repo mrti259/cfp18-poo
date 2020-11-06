@@ -1,0 +1,27 @@
+{% extends "base.jinja" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block main %}
+    <section>
+        <form action="" method="post">
+            {{form.hidden_tag()}}
+            <div class="form-group form-email">
+                {{form.email.label}}
+                {{form.email(type="email")}}
+                {% for error in form.clave.errors %}
+                <span class="form-error">{{ errors in form.clave.errors }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group form-password">
+                {{form.clave.label}}
+                {{form.clave}}
+                {% for error in form.clave.errors %}
+                <span class="form-error">{{ errors in form.clave.errors }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-submit">
+                {{form.submit}}
+            </div>
+        </form>
+    </section>
+{% endblock main %}

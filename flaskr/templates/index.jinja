@@ -1,0 +1,22 @@
+{% extends "base.jinja" %}
+
+{% block main %}
+  <section id="products" class="panel panel-default">
+    <header class="panel-heading">
+      <h1 class="panel-title">Productos</h1>
+    </header>
+    <div class="panel-body">
+      {% for producto in productos %}
+      <article class="product col-xs-6 col-md-3 text-center">
+        <img src="" alt="">
+        <div class="caption">
+          <h3 class="product-name">{{producto.nombre}}</h3>
+          <p class="product-description">{{producto.descripcion}}</p>
+          <span class="product-price">$ {{producto.precio}}</span>
+        </div>
+        <button class="btn btn-primary add-to-cart">Comprar</button>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock main %}

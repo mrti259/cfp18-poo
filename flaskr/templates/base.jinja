@@ -1,0 +1,71 @@
+{% extends "bootstrap/base.html" %}
+
+{% block metas %}
+    {{ super() }}
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="keywords" content="{{ keywords }}">
+{% endblock metas %}
+
+{% block styles %}
+    <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+{% endblock styles %}
+
+{% block navbar %}
+    <nav class="navbar navbar-inverse">
+        <a class="navbar-brand" href="{{ url_for('index') }}">{{ name }}</a>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_anonymous %}
+                <li><a href="{{ url_for('login') }}">Iniciar sesión</a></li>
+                <li><a href="{{ url_for('signup') }}">Registrarse</a></li>
+            {% else %}
+                <li class="dropdown">
+                    <a>{{ current_user.email }}</a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a class="nav-link">Favoritos</a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a class="nav-link">Ver compras</a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a class="nav-link" href="{{ url_for('edit_user') }}">Cambiar mis datos</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+            {% endif %}
+            </ul>
+        </div>
+    </nav>
+{% endblock navbar %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="clearfix">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+            <span class="flashed-messages">{{ message }}</span>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        </div>
+        <header class="jumbotron text-center">
+            <h1>{{ title }}</h1>
+            <h3>{{ description }}</h3>
+        </header>
+        <main class="">{% block main %}{% endblock main %}</main>
+
+        <footer>
+            <span class="glyphicon glyphicon-heart"></span>
+            <span>Hecho con Amor (y Delfina y la más mejor del mundo, Lumo).</span>
+        </footer>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock scripts %}

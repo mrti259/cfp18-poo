@@ -1,0 +1,19 @@
+Some commands:
+
+> make setup
+creates virtual env and installs dependencies.
+
+> make run
+run server
+
+> make test
+run tests
+
+> make init_db
+initilizates database repository
+
+> make migrate
+creates new migration on database repository
+
+> make update
+updates database

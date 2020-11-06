@@ -1,0 +1,34 @@
+{% extends "base.jinja" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block main %}
+  <section>
+    <form action="" method="post">
+      {{ form.hidden_tag() }}
+      <div class="form-name">
+        {{form.nombre.label}}
+        {{form.nombre}}
+        {% for error in form.nombre.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-description">
+        {{form.descripcion.label}}
+        {{form.descripcion}}
+        {% for error in form.descripcion.errors %}
+        <span class="form-error">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-price">
+        {{form.precio.label}}
+        {{form.precio(type="number")}}
+        {% for error in form.precio.errors %}
+        <span class="form-error">{{ errors in form.precio.errors }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-submit">
+        {{form.submit}}
+      </div>
+    </form>
+  </section>
+{% endblock main %}
