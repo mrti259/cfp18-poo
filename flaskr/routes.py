@@ -5,6 +5,7 @@ from .app import app
 from . import dba
 from .forms import ProductForm, UserForm, LoginForm
 from .info import info
+from .models import Producto
 
 @app.route('/')
 def index():
@@ -13,20 +14,6 @@ def index():
         'index.jinja',
         **info,
         productos=productos
-    )
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = ProductForm()
-
-    if form.validate_on_submit():
-        dba.register_product(form.data)
-        return redirect(url_for('index'))
-
-    return render_template(
-        'forms/quick_form.jinja',
-        **info,
-        form=form
     )
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -52,7 +39,7 @@ def logout():
     return redirect(url_for('index'))
 
 @app.route('/signup', methods=['GET', 'POST'])
-def signup():
+def create_user():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
@@ -68,11 +55,41 @@ def signup():
         form=form
     )
 
-@app.route('/edit')
+@app.route('/profile/edit', methods=["GET", "POST"])
 @login_required
 def edit_user():
-    form = UserForm()
-    return render_template('forms/edit_user.jinja', form=form)
+    form = UserForm(obj=current_user)
+    if form.validate_on_submit():
+        dba.update_user(current_user.usuario_id, form)
+    return render_template('forms/quick_form.jinja', **info, form=form)
+
+@app.route('/product/register', methods=['GET', 'POST'])
+def create_product():
+    form = ProductForm()
+
+    if form.validate_on_submit():
+        dba.register_product(form.data)
+        return redirect(url_for('index'))
+
+    return render_template(
+        'forms/quick_form.jinja',
+        **info,
+        form=form
+    )
+
+@app.route('/product/edit/<_id>', methods=['GET', 'POST'])
+def edit_product(_id):
+    form = ProductForm(obj=Producto.query.get(_id))
+
+    if form.validate_on_submit():
+        dba.update_producto(_id, form)
+        return redirect(url_for('index'))
+
+    return render_template(
+        'forms/quick_form.jinja',
+        **info,
+        form=form
+    )
 
 @app.errorhandler(404)
 def not_found_error(error):

@@ -49,7 +49,7 @@ def check_login(login_form):
     If it's valid, user logs in.
     """
     user = Usuario.query.filter_by(email=login_form['email']).first()
-    if check_password_hash(user.clave, login_form['clave']):
+    if user and check_password_hash(user.clave, login_form['clave']):
         login_user(user)
 
 def create_user(user_form):
@@ -74,3 +74,11 @@ def register_user(user_form):
     """
     user = create_user(user_form)
     add(user)
+
+def update_user(_id, user_form):
+    """
+    Update user data from a user_form
+    """
+    user = Usuario.query.get(_id)
+    user_form.populate_obj(user)
+    db.session.commit()

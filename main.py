@@ -2,8 +2,8 @@ import os
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 
-from flaskr.app import app, db
-from flaskr import models, forms
+from .flaskr.app import app, db
+from .flaskr import models, forms
 
 @app.shell_context_processor
 def make_shell_context():
@@ -13,6 +13,7 @@ def make_shell_context():
         "forms": forms
     }
 
+# No se mucho de esto...
 if not app.debug and not app.testing:
     if app.config['MAIL_SERVER']:
         auth = None
