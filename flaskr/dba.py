@@ -43,6 +43,14 @@ def register_product(product_form):
     product = create_product(product_form)
     add(product)
 
+def update_product(_id, product_form):
+    """
+    Updates Producto from product_form
+    """
+    product = Producto.query.get(_id)
+    product_form.populate_obj(product)
+    db.session.commit()
+
 def check_login(login_form):
     """
     Checks if LoginForm data.
@@ -77,7 +85,7 @@ def register_user(user_form):
 
 def update_user(_id, user_form):
     """
-    Update user data from a user_form
+    Update Usuario from a user_form
     """
     user = Usuario.query.get(_id)
     user_form.populate_obj(user)

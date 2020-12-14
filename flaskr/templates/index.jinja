@@ -14,7 +14,8 @@
           <p class="product-description">{{producto.descripcion}}</p>
           <span class="product-price">$ {{producto.precio}}</span>
         </div>
-        <button class="btn btn-primary add-to-cart">Comprar</button>
+        <a class="btn btn-primary add-to-cart"
+          href="{{url_for('buy_product', _id=producto.producto_id)}}"">Comprar</a>
       </article>
       {% endfor %}
     </div>

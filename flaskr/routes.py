@@ -55,7 +55,7 @@ def create_user():
         form=form
     )
 
-@app.route('/profile/edit', methods=["GET", "POST"])
+@app.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
 def edit_user():
     form = UserForm(obj=current_user)
@@ -82,7 +82,7 @@ def edit_product(_id):
     form = ProductForm(obj=Producto.query.get(_id))
 
     if form.validate_on_submit():
-        dba.update_producto(_id, form)
+        dba.update_product(_id, form)
         return redirect(url_for('index'))
 
     return render_template(
@@ -90,6 +90,15 @@ def edit_product(_id):
         **info,
         form=form
     )
+
+@app.route('/product/buy/<_id>', methods=['GET', 'POST'])
+def buy_product(_id):
+    flash("Cargar formulario de compra...", _id)
+    if current_user.is_authenticated:
+        pass
+    else:
+        pass
+    return redirect(url_for('index'))
 
 @app.errorhandler(404)
 def not_found_error(error):

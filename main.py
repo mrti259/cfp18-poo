@@ -2,8 +2,14 @@ import os
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 
-from flaskr.app import app, db
-from flaskr import models, forms
+try:
+    from flaskr.app import app, db
+    from flaskr import models, forms
+except ImportError:
+    from .flaskr.app import app, db
+    from .flaskr import models, forms
+except:
+    exit()
 
 @app.shell_context_processor
 def make_shell_context():
